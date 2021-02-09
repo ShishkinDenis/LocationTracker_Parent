@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -125,6 +126,10 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
                         FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
                         binding.status.setText("Online");
+                        //вынести в отдельный метод -goToMapActivity
+                        Intent intent = new Intent(this, MapActivity.class);
+                        intent.putExtra("abc3", "abc3");
+                        startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
