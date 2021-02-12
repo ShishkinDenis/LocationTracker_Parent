@@ -34,9 +34,9 @@
         android:layout_width="173dp"
         android:layout_height="0dp"
         android:layout_marginTop="354dp"
-        android:layout_marginBottom="39dp"
+        android:layout_marginBottom="136dp"
         android:text="tvShowLocation"
-        app:layout_constraintBottom_toTopOf="@+id/btnGoToMap"
+        app:layout_constraintBottom_toTopOf="@+id/btnGoToCalendar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -50,5 +50,16 @@
         android:text="Go to Map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvShowLocation"
+        app:layout_constraintTop_toBottomOf="@+id/tvShowLocation" />
+
+    <Button
+        android:id="@+id/btnGoToCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginBottom="121dp"
+        android:text="Go to Caledar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/btnGoToMap"
         app:layout_constraintTop_toBottomOf="@+id/tvShowLocation" />
 </androidx.constraintlayout.widget.ConstraintLayout>

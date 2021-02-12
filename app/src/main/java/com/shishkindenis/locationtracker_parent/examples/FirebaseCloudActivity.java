@@ -42,6 +42,7 @@ public class FirebaseCloudActivity extends AppCompatActivity {
 
     Button btnGet;
     Button btnGoToMap;
+    Button btnGoToCalendar;
 
     List<String> listOfLocation = new ArrayList<>();
 
@@ -75,6 +76,13 @@ public class FirebaseCloudActivity extends AppCompatActivity {
                 Intent intent = new Intent(this, MapActivity.class);
                 intent.putExtra("abc6", "abc6");
                 startActivity(intent);
+        });
+
+        btnGoToCalendar = findViewById(R.id.btnGoToCalendar);
+        btnGoToCalendar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CalendarActivity.class);
+            intent.putExtra("abc6", "abc6");
+            startActivity(intent);
         });
 
 //        addData();

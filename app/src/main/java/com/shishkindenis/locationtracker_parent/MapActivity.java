@@ -9,6 +9,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -23,42 +24,50 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.shishkindenis.locationtracker_parent.examples.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.examples.FirebaseCloudActivity;
 
 import java.util.Map;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
+//    Попробуй CallBack для подгрузки сначала Data-затем отображения точки
+//    Попробуй другой метод GEOCoder
+//    Track the device location using periodic location requests.
 
+//    Если локация изменилась-добавить новый маркер
     String TAG = "TAG";
     FirebaseFirestore db;
-    Map<String, Object> user;
-
     public Double longitude = -34.0;
     public Double latitude = 151.0;
-
     TextView tvShowLocationMap;
-
-    Button btnGet;
-
     private GoogleMap mMap;
+    Button btnGetLocation;
+//    CalendarActivity calendarActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        db = FirebaseFirestore.getInstance();
-
-        readLocation();
         setContentView(R.layout.activity_map);
 
+        tvShowLocationMap = findViewById(R.id.tvShowLocationInTV);
+        btnGetLocation = findViewById(R.id.btnGetLocation);
+
+//        calendarActivity = new CalendarActivity();
 
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+
+
+        db = FirebaseFirestore.getInstance();
+
+//        btnGetLocation.setOnClickListener(v -> readLocation());
+        readLocation();
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        tvShowLocationMap = findViewById(R.id.tvShowLocationInTV);
+
 
     }
 
@@ -93,20 +102,19 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
+//        FirebaseCloudActivity firebaseCloudActivity = new FirebaseCloudActivity();
+
+//        LatLng sydney = new LatLng(longitude, latitude);
 
 
-
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-        LatLng sydney = new LatLng(longitude, latitude);
-
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney").snippet("В Сиднее много котов"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
     }
 
     public  void readLocation(){
-        db.collection("locationMap")
+
+        db.collection("locationMap")/*.orderBy("2021-03-12")*/
+//                .whereEqualTo("Date","2021-01-12")
+                .whereEqualTo("Date",CalendarActivity.sDate)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -114,15 +122,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                tvShowLocationMap.setText(String.valueOf(document.get("Longitude")));
-
-                                Log.d(TAG, String.valueOf(document.get("Longitude")));
-                                Log.d(TAG, String.valueOf(document.get("Latitude")));
-
+//                                tvShowLocationMap.setText(String.valueOf(document.get("Longitude")));
+//
+//                                Log.d(TAG, String.valueOf(document.get("Longitude")));
+//                                Log.d(TAG, String.valueOf(document.get("Latitude")));
+//                            orderBy
                                 longitude = (Double) document.get("Longitude");
                                 latitude = (Double) document.get("Latitude");
 
+                                LatLng someplace = new LatLng(latitude, longitude);
+                                mMap.addMarker(new MarkerOptions().position(someplace).title("Marker in Someplace").snippet(latitude.toString() + "\n" + longitude.toString()));
+                                mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
 
                             }
 
