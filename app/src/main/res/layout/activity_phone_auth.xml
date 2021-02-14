@@ -66,8 +66,8 @@
         android:layout_marginStart="77dp"
         android:layout_marginTop="50dp"
         android:ems="10"
+        android:hint="Phone number"
         android:inputType="textPersonName"
-        android:text="Phone number"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -77,8 +77,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="5dp"
         android:ems="10"
+        android:hint="Verification code"
         android:inputType="textPersonName"
-        android:text="Verification code"
         app:layout_constraintEnd_toEndOf="@+id/etPhoneNumber"
         app:layout_constraintTop_toBottomOf="@+id/etPhoneNumber" />
 

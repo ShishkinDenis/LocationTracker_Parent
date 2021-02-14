@@ -112,8 +112,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     public  void readLocation(){
 
-        db.collection("locationMap")/*.orderBy("2021-03-12")*/
-//                .whereEqualTo("Date","2021-01-12")
+//        db.collection("locationMap")
+        db.collection(EmailAuthActivity.userID)
                 .whereEqualTo("Date",CalendarActivity.sDate)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

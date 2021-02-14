@@ -1,19 +1,16 @@
 package com.shishkindenis.locationtracker_parent;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -21,12 +18,13 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityPhoneAuthBinding;
+import com.shishkindenis.locationtracker_parent.examples.CalendarActivity;
 
 import java.util.concurrent.TimeUnit;
 
 public class PhoneAuthActivity extends AppCompatActivity {
 
-    private ActivityPhoneAuthBinding binding;
+    private ActivityPhoneAuthBinding activityPhoneAuthBinding;
 
     private FirebaseAuth mAuth;
 
@@ -49,21 +47,21 @@ public class PhoneAuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityPhoneAuthBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        activityPhoneAuthBinding = ActivityPhoneAuthBinding.inflate(getLayoutInflater());
+        View view = activityPhoneAuthBinding.getRoot();
         setContentView(view);
 
         mAuth = FirebaseAuth.getInstance();
 
-        binding.btnStart.setOnClickListener(v -> {
+        activityPhoneAuthBinding.btnStart.setOnClickListener(v -> {
             if (!validatePhoneNumber()) {
                 return;
             }
             startPhoneNumberVerification("+79155474348");
         });
 
-        binding.btnVerify.setOnClickListener(v -> {
-            verifyPhoneNumberWithCode(mVerificationId,binding.etVerificationCode.getText().toString());
+        activityPhoneAuthBinding.btnVerify.setOnClickListener(v -> {
+            verifyPhoneNumberWithCode(mVerificationId, activityPhoneAuthBinding.etVerificationCode.getText().toString());
 //            binding.status.setText("button pushed");
         });
 
@@ -101,7 +99,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
                     // Invalid request
                     // [START_EXCLUDE]
-                    binding.etPhoneNumber.setError("Invalid phone number.");
+                    activityPhoneAuthBinding.etPhoneNumber.setError("Invalid phone number.");
                     // [END_EXCLUDE]
                 } else if (e instanceof FirebaseTooManyRequestsException) {
                     // The SMS quota for the project has been exceeded
@@ -147,7 +145,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
         // [START_EXCLUDE]
         if (mVerificationInProgress && validatePhoneNumber()) {
-            startPhoneNumberVerification(binding.etPhoneNumber.getText().toString());
+            startPhoneNumberVerification(activityPhoneAuthBinding.etPhoneNumber.getText().toString());
         }
         // [END_EXCLUDE]
     }
@@ -169,39 +167,40 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
     private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
 
-                            FirebaseUser user = task.getResult().getUser();
-                            // [START_EXCLUDE]
+                        FirebaseUser user = task.getResult().getUser();
+                        // [START_EXCLUDE]
 //                            updateUI(STATE_SIGNIN_SUCCESS, user);
-                            // [END_EXCLUDE]
-                        } else {
-                            // Sign in failed, display a message and update the UI
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                // The verification code entered was invalid
-                                // [START_EXCLUDE silent]
-                                binding.etVerificationCode.setError("Invalid code.");
-                                // [END_EXCLUDE]
-                            }
+                        // [END_EXCLUDE]
+
+                        Intent intent = new Intent(this, CalendarActivity.class);
+                        intent.putExtra("abc6", "abc6");
+                        startActivity(intent);
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            // The verification code entered was invalid
                             // [START_EXCLUDE silent]
-                            // Update UI
-//                            updateUI(STATE_SIGNIN_FAILED);
+                            activityPhoneAuthBinding.etVerificationCode.setError("Invalid code.");
                             // [END_EXCLUDE]
                         }
+                        // [START_EXCLUDE silent]
+                        // Update UI
+//                            updateUI(STATE_SIGNIN_FAILED);
+                        // [END_EXCLUDE]
                     }
                 });
     }
 
     private boolean validatePhoneNumber() {
 //        String phoneNumber = mBinding.fieldPhoneNumber.getText().toString();
-        if (binding.etPhoneNumber.getText().toString().isEmpty()) {
-            binding.etPhoneNumber.setError("Invalid phone number.");
+        if (activityPhoneAuthBinding.etPhoneNumber.getText().toString().isEmpty()) {
+            activityPhoneAuthBinding.etPhoneNumber.setError("Invalid phone number.");
             return false;
         }
 

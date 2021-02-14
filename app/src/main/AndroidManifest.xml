@@ -22,11 +22,7 @@
 
         </activity>
         <activity android:name=".examples.FirebaseCloudActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".examples.GetTextViaFirebaseActivity"></activity>
         <!--
@@ -41,10 +37,18 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MapActivity"></activity>
+        <activity android:name=".MapActivity">
+
+        </activity>
         <activity android:name=".PhoneAuthActivity" />
-        <activity android:name=".SignInActivity" />
-        <activity android:name=".MainActivity" />
+        <activity android:name=".EmailAuthActivity" />
+        <activity android:name=".MainActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+    </activity>
     </application>
 
 </manifest>

@@ -1,35 +1,41 @@
 package com.shishkindenis.locationtracker_parent;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMainBinding;
-import com.shishkindenis.locationtracker_parent.databinding.ActivityPhoneAuthBinding;
+import com.shishkindenis.locationtracker_parent.examples.CalendarActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
+    private ActivityMainBinding activityMainBinding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        activityMainBinding = ActivityMainBinding.inflate(getLayoutInflater());
+        View view = activityMainBinding.getRoot();
         setContentView(view);
 
-        binding.btnEmail.setOnClickListener(v -> {
-            Intent intent = new Intent(this, SignInActivity.class);
+        activityMainBinding.btnEmail.setOnClickListener(v -> {
+            Intent intent = new Intent(this, EmailAuthActivity.class);
             intent.putExtra("abc", "abc");
             startActivity(intent);
         });
 
-        binding.btnPhone.setOnClickListener(v -> {
+        activityMainBinding.btnPhone.setOnClickListener(v -> {
             Intent intent = new Intent(this, PhoneAuthActivity.class);
             intent.putExtra("abc2", "abc2");
+            startActivity(intent);
+
+        });
+
+        activityMainBinding.btnCalendar.setOnClickListener(v -> {
+            Intent intent = new Intent(this, CalendarActivity.class);
+            intent.putExtra("abc22", "abc22");
             startActivity(intent);
 
         });

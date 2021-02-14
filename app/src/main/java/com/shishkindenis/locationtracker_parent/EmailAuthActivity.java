@@ -1,76 +1,75 @@
 package com.shishkindenis.locationtracker_parent;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.shishkindenis.locationtracker_parent.databinding.ActivitySignInBinding;
+import com.shishkindenis.locationtracker_parent.databinding.ActivityEmailAuthBinding;
+import com.shishkindenis.locationtracker_parent.examples.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.presenters.SignInPresenter;
 import com.shishkindenis.locationtracker_parent.views.SignInView;
 
 import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
 
-public class SignInActivity extends MvpAppCompatActivity implements SignInView {
+public class EmailAuthActivity extends MvpAppCompatActivity implements SignInView {
 
     @InjectPresenter
     SignInPresenter signInPresenter;
 
     private static final String TAG = "EmailPassword";
 
-    private ActivitySignInBinding binding;
+    private ActivityEmailAuthBinding activityEmailAuthBinding;
 
     private FirebaseAuth mAuth;
 
     private String email;
     private String password;
 
+    public static String userID;
+
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivitySignInBinding.inflate(getLayoutInflater());
-        View view = binding.getRoot();
+        activityEmailAuthBinding = ActivityEmailAuthBinding.inflate(getLayoutInflater());
+        View view = activityEmailAuthBinding.getRoot();
         setContentView(view);
 
         mAuth = FirebaseAuth.getInstance();
+//        FirebaseUser user = mAuth.getCurrentUser();
+//        userID = user.getUid();
 
-        email = binding.etEmail.getText().toString();
-        password = binding.etPassword.getText().toString();
+        email = activityEmailAuthBinding.etEmail.getText().toString();
+        password = activityEmailAuthBinding.etPassword.getText().toString();
 
 
-        binding.btnLogin.setOnClickListener(v -> {
+        activityEmailAuthBinding.btnLogin.setOnClickListener(v -> {
             Toast toast = Toast.makeText(getApplicationContext(), "Действие",
                     Toast.LENGTH_SHORT);
             toast.show();
             checkEmail();
             checkPassword();
-            binding.etEmail.setError("f");
+            activityEmailAuthBinding.etEmail.setError("f");
             showError();
         });
-        binding.btnRegister.setOnClickListener(v -> {
+        activityEmailAuthBinding.btnRegister.setOnClickListener(v -> {
 //                createAccount(email,password);
 //                 createAccount("sh-kin@mail.ru","stalker");
-             createAccount(binding.etEmail.getText().toString(),binding.etPassword.getText().toString());
+             createAccount(activityEmailAuthBinding.etEmail.getText().toString(), activityEmailAuthBinding.etPassword.getText().toString());
         });
 
-        binding.btnLogin.setOnClickListener(v -> signIn(binding.etEmail.getText().toString(),
-                binding.etPassword.getText().toString()));
+        activityEmailAuthBinding.btnLogin.setOnClickListener(v -> signIn(activityEmailAuthBinding.etEmail.getText().toString(),
+                activityEmailAuthBinding.etPassword.getText().toString()));
 
-        binding.btnSignOut.setOnClickListener(new View.OnClickListener() {
+        activityEmailAuthBinding.btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signOut();
@@ -92,12 +91,13 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "createUserWithEmail:success");
-                        FirebaseUser user = mAuth.getCurrentUser();
+//                        FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
+
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(SignInActivity.this, "Authentication failed.",
+                        Toast.makeText(EmailAuthActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                     }
@@ -123,17 +123,20 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d(TAG, "signInWithEmail:success");
+
                         FirebaseUser user = mAuth.getCurrentUser();
+                        userID = user.getUid();
+//                        FirebaseUser user = mAuth.getCurrentUser();
 //                            updateUI(user);
-                        binding.status.setText("Online");
+                        activityEmailAuthBinding.status.setText("Online");
                         //вынести в отдельный метод -goToMapActivity
-                        Intent intent = new Intent(this, MapActivity.class);
+                        Intent intent = new Intent(this, CalendarActivity.class);
                         intent.putExtra("abc3", "abc3");
                         startActivity(intent);
                     } else {
                         // If sign in fails, display a message to the user.
                         Log.w(TAG, "signInWithEmail:failure", task.getException());
-                        Toast.makeText(SignInActivity.this, "Authentication failed.",
+                        Toast.makeText(EmailAuthActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
                         // [START_EXCLUDE]
@@ -153,26 +156,26 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
 
     private void signOut() {
         mAuth.signOut();
-        binding.status.setText("OFFline");
+        activityEmailAuthBinding.status.setText("OFFline");
     }
 
     private boolean validateForm() {
         boolean valid = true;
 
 //        if (TextUtils.isEmpty(email)) {
-        if (binding.etEmail.getText().toString().isEmpty()) {
-            binding.etEmail.setError("Required email.");
+        if (activityEmailAuthBinding.etEmail.getText().toString().isEmpty()) {
+            activityEmailAuthBinding.etEmail.setError("Required email.");
             valid = false;
         } else {
-            binding.etEmail.setError(null);
+            activityEmailAuthBinding.etEmail.setError(null);
         }
 
 //        if (TextUtils.isEmpty(password)) {
-        if (binding.etPassword.getText().toString().isEmpty()) {
-            binding.etPassword.setError("Required.");
+        if (activityEmailAuthBinding.etPassword.getText().toString().isEmpty()) {
+            activityEmailAuthBinding.etPassword.setError("Required.");
             valid = false;
         } else {
-            binding.etPassword.setError(null);
+            activityEmailAuthBinding.etPassword.setError(null);
         }
 
         return valid;
@@ -226,8 +229,8 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
     }
     @Override
     public void checkEmail(){
-        if (binding.etEmail.getText().toString().isEmpty()){
-            binding.etEmail.setError("f");
+        if (activityEmailAuthBinding.etEmail.getText().toString().isEmpty()){
+            activityEmailAuthBinding.etEmail.setError("f");
         }
 
 //        if else проверка на валидность
@@ -235,8 +238,8 @@ public class SignInActivity extends MvpAppCompatActivity implements SignInView {
 
     @Override
     public void checkPassword() {
-        if (binding.etPassword.getText().toString().isEmpty()){
-            binding.etPassword.setError("a");
+        if (activityEmailAuthBinding.etPassword.getText().toString().isEmpty()){
+            activityEmailAuthBinding.etPassword.setError("a");
         }
         //        if else проверка на валидность
     }
