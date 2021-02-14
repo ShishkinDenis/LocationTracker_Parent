@@ -4,18 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".examples.CalendarActivity">
+    tools:context=".activities.CalendarActivity">
 
     <CalendarView
         android:id="@+id/calendarView"
         android:layout_width="297dp"
         android:layout_height="0dp"
         android:layout_marginTop="134dp"
-        android:layout_marginBottom="84dp"
-        app:layout_constraintBottom_toTopOf="@+id/btnGoToMapFromCalendar"
+        android:layout_marginBottom="229dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tvChooseDate" />
 
     <Button
         android:id="@+id/btnGoToMapFromCalendar"
@@ -29,12 +29,15 @@
         app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
     <TextView
-        android:id="@+id/tvDate"
+        android:id="@+id/tvChooseDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="41dp"
-        android:text="TextView"
-        app:layout_constraintBaseline_toBaselineOf="@+id/btnGoToMapFromCalendar"
-        app:layout_constraintStart_toStartOf="parent" />
+        android:layout_marginStart="161dp"
+        android:layout_marginTop="63dp"
+        android:layout_marginBottom="52dp"
+        android:text="Choose the date"
+        app:layout_constraintBottom_toTopOf="@+id/calendarView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

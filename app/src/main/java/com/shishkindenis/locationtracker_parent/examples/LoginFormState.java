@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_parent;
+package com.shishkindenis.locationtracker_parent.examples;
 
 import androidx.annotation.Nullable;
 

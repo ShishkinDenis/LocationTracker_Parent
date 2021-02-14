@@ -5,10 +5,9 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy;
 import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
-public interface SignInView extends MvpView {
+public interface EmailAuthView extends MvpView {
 
     void showError();
-
     void checkEmail();
     void checkPassword();
 

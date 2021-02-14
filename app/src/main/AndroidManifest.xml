@@ -18,10 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LocationTracker_Parent">
-        <activity android:name=".activities.WelcomeActivity"></activity>
-        <activity android:name=".examples.CalendarActivity"></activity>
-        <activity android:name=".examples.FirebaseCloudActivity"></activity>
-        <activity android:name=".examples.GetTextViaFirebaseActivity" />
+        <activity android:name=".examples.WelcomeActivity"></activity>
+        <activity android:name=".activities.CalendarActivity"></activity>
+
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -34,10 +33,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity android:name=".MapActivity"></activity>
-        <activity android:name=".PhoneAuthActivity" />
-        <activity android:name=".EmailAuthActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MapActivity"></activity>
+        <activity android:name=".activities.PhoneAuthActivity" />
+        <activity android:name=".activities.EmailAuthActivity" />
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

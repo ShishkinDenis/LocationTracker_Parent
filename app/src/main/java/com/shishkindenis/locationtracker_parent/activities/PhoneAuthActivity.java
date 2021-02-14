@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_parent;
+package com.shishkindenis.locationtracker_parent.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.FirebaseException;
@@ -18,11 +17,18 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityPhoneAuthBinding;
-import com.shishkindenis.locationtracker_parent.examples.CalendarActivity;
+import com.shishkindenis.locationtracker_parent.presenters.PhoneAuthPresenter;
+import com.shishkindenis.locationtracker_parent.views.PhoneAuthView;
 
 import java.util.concurrent.TimeUnit;
 
-public class PhoneAuthActivity extends AppCompatActivity {
+import moxy.MvpAppCompatActivity;
+import moxy.presenter.InjectPresenter;
+
+public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuthView {
+
+    @InjectPresenter
+    PhoneAuthPresenter phoneAuthPresenter;
 
     private ActivityPhoneAuthBinding activityPhoneAuthBinding;
 
@@ -30,14 +36,6 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
     private static final String TAG = "PhoneAuthActivity";
 
-    private static final String KEY_VERIFY_IN_PROGRESS = "key_verify_in_progress";
-
-    private static final int STATE_INITIALIZED = 1;
-    private static final int STATE_CODE_SENT = 2;
-    private static final int STATE_VERIFY_FAILED = 3;
-    private static final int STATE_VERIFY_SUCCESS = 4;
-    private static final int STATE_SIGNIN_FAILED = 5;
-    private static final int STATE_SIGNIN_SUCCESS = 6;
 
     private boolean mVerificationInProgress = false;
     private String mVerificationId;
@@ -62,7 +60,7 @@ public class PhoneAuthActivity extends AppCompatActivity {
 
         activityPhoneAuthBinding.btnVerify.setOnClickListener(v -> {
             verifyPhoneNumberWithCode(mVerificationId, activityPhoneAuthBinding.etVerificationCode.getText().toString());
-//            binding.status.setText("button pushed");
+
         });
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -214,16 +212,16 @@ public class PhoneAuthActivity extends AppCompatActivity {
         signInWithPhoneAuthCredential(credential);
     }
 
-    private void resendVerificationCode(String phoneNumber,
-                                        PhoneAuthProvider.ForceResendingToken token) {
-        PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(mAuth)
-                        .setPhoneNumber(phoneNumber)       // Phone number to verify
-                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-                        .setActivity(this)                 // Activity (for callback binding)
-                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-                        .setForceResendingToken(token)     // ForceResendingToken from callbacks
-                        .build();
-        PhoneAuthProvider.verifyPhoneNumber(options);
-    }
+//    private void resendVerificationCode(String phoneNumber,
+//                                        PhoneAuthProvider.ForceResendingToken token) {
+//        PhoneAuthOptions options =
+//                PhoneAuthOptions.newBuilder(mAuth)
+//                        .setPhoneNumber(phoneNumber)       // Phone number to verify
+//                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
+//                        .setActivity(this)                 // Activity (for callback binding)
+//                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
+//                        .setForceResendingToken(token)     // ForceResendingToken from callbacks
+//                        .build();
+//        PhoneAuthProvider.verifyPhoneNumber(options);
+//    }
 }
