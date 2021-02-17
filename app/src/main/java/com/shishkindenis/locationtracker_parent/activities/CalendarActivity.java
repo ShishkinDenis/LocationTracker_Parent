@@ -1,9 +1,9 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import com.shishkindenis.locationtracker_parent.databinding.ActivityCalendarBinding;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
@@ -26,6 +26,7 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
         View calendarActivityView = activityCalendarBinding.getRoot();
         setContentView(calendarActivityView);
 
+        showAlertDialog();
 
         activityCalendarBinding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
             int mYear = year;
@@ -38,9 +39,7 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             calendar.set(year, month, dayOfMonth);
             sDate = sdf.format(calendar.getTime());
 
-
-
-            Toast.makeText(getApplicationContext(), sDate, Toast.LENGTH_LONG).show();
+//            Toast.makeText(getApplicationContext(), sDate, Toast.LENGTH_LONG).show();
         });
 
         activityCalendarBinding.btnGoToMapFromCalendar.setOnClickListener(v -> {
@@ -49,5 +48,12 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             startActivity(intent);
 
         });
+    }
+    public void showAlertDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("Please choose the date of tracking")
+                .setPositiveButton("OK", (dialog, which) -> {
+                })
+                .show();
     }
 }

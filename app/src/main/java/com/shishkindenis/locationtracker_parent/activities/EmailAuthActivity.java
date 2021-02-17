@@ -1,15 +1,11 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityEmailAuthBinding;
 import com.shishkindenis.locationtracker_parent.presenters.EmailAuthPresenter;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
@@ -22,161 +18,129 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
     @InjectPresenter
     EmailAuthPresenter emailAuthPresenter;
 
-    private static final String TAG = "EmailPassword";
-
-    private ActivityEmailAuthBinding activityEmailAuthBinding;
+    private ActivityEmailAuthBinding binding;
 
     private FirebaseAuth mAuth;
 
     private String email;
     private String password;
 
-    public static String userID;
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityEmailAuthBinding = ActivityEmailAuthBinding.inflate(getLayoutInflater());
-        View view = activityEmailAuthBinding.getRoot();
+        binding = ActivityEmailAuthBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
 
         mAuth = FirebaseAuth.getInstance();
 
-
-        email = activityEmailAuthBinding.etEmail.getText().toString();
-        password = activityEmailAuthBinding.etPassword.getText().toString();
-
-
-        activityEmailAuthBinding.btnLogin.setOnClickListener(v -> {
-            Toast toast = Toast.makeText(getApplicationContext(), "Действие",
-                    Toast.LENGTH_SHORT);
-            toast.show();
-            checkEmail();
-            checkPassword();
-            activityEmailAuthBinding.etEmail.setError("f");
-            showError();
-        });
-        activityEmailAuthBinding.btnRegister.setOnClickListener(v -> {
-
-             createAccount(activityEmailAuthBinding.etEmail.getText().toString(), activityEmailAuthBinding.etPassword.getText().toString());
-        });
-
-        activityEmailAuthBinding.btnLogin.setOnClickListener(v -> signIn(activityEmailAuthBinding.etEmail.getText().toString(),
-                activityEmailAuthBinding.etPassword.getText().toString()));
-
-        activityEmailAuthBinding.btnSignOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                signOut();
+        email = binding.etEmail.getText().toString();
+        password = binding.etPassword.getText().toString();
+//        binding.btnRegister.setOnClickListener(v -> createAccount(binding.etEmail.getText().toString(),
+//                binding.etPassword.getText().toString()));
+        //        binding.btnLogin.setOnClickListener(v -> signIn(binding.etEmail.getText().toString(),
+//                binding.etPassword.getText().toString()));
+        //        binding.btnSignOut.setOnClickListener(v -> signOut());
+        binding.btnRegister.setOnClickListener(v -> {
+            if (binding.etEmail.getText().toString().isEmpty()) {
+                binding.etEmail.setError("Required email");
+            }
+//            if else?
+            if (binding.etPassword.getText().toString().isEmpty()) {
+                binding.etPassword.setError("Required password");
+            }
+            else {
+                emailAuthPresenter.createAccount(mAuth,binding.etEmail.getText().toString(),
+                        binding.etPassword.getText().toString());
             }
         });
+        binding.btnLogin.setOnClickListener(v -> {
+//            вынести If в ValidateForm
+            if (binding.etEmail.getText().toString().isEmpty()) {
+                binding.etEmail.setError("Required email");
+            }
+//            if else?
+            if (binding.etPassword.getText().toString().isEmpty()) {
+                binding.etPassword.setError("Required password");
+            }
+            else {
+                emailAuthPresenter.signIn(mAuth,binding.etEmail.getText().toString(),
+                        binding.etPassword.getText().toString());
+            }
+        });
+        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(mAuth));
     }
 
-    private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
+  /*  private void createAccount(String email, String password) {
+//        ЧТО значит пустой return?
         if (!validateForm()) {
             return;
         }
-
-//        showProgressBar();
-
-        // [START create_user_with_email]
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "createUserWithEmail:success");
-//                        FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
-
+                       Toast.makeText(getApplicationContext(), "User with email: " + email + " was signed up",
+                                Toast.LENGTH_LONG).show();
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                        Toast.makeText(EmailAuthActivity.this, "Authentication failed.",
-                                Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
+                        Toast.makeText(EmailAuthActivity.this, "Signing up failed. Check your internet connection",
+                                Toast.LENGTH_LONG).show();
                     }
-
-                    // [START_EXCLUDE]
-//                        hideProgressBar();
-                    // [END_EXCLUDE]
                 });
-        // [END create_user_with_email]
-    }
-
-    private void signIn(String email, String password) {
-        Log.d(TAG, "signIn:" + email);
+    }*/
+   /* private void signIn(String email, String password) {
         if (!validateForm()) {
             return;
         }
-
-//        showProgressBar();
-
-        // [START sign_in_with_email]
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success");
-
                         FirebaseUser user = mAuth.getCurrentUser();
+//                        if user !=null
                         userID = user.getUid();
-//                        FirebaseUser user = mAuth.getCurrentUser();
-//                            updateUI(user);
-                        activityEmailAuthBinding.status.setText("Online");
-                        //вынести в отдельный метод -goToMapActivity
-                        Intent intent = new Intent(this, CalendarActivity.class);
-                        intent.putExtra("abc3", "abc3");
-                        startActivity(intent);
+
+                        Toast.makeText(getApplicationContext(), "Authentication successful",
+                                Toast.LENGTH_LONG).show();
+
+                        goToAnotherActivity(CalendarActivity.class,"abc3","abc3");
                     } else {
-                        // If sign in fails, display a message to the user.
-                        Log.w(TAG, "signInWithEmail:failure", task.getException());
                         Toast.makeText(EmailAuthActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
-//                            updateUI(null);
-                        // [START_EXCLUDE]
-//                        checkForMultiFactorFailure(task.getException());
-                        // [END_EXCLUDE]
                     }
-
-                    // [START_EXCLUDE]
-                    if (!task.isSuccessful()) {
-//                        mBinding.status.setText(R.string.auth_failed);
-                    }
-//                        hideProgressBar();
-                    // [END_EXCLUDE]
                 });
-        // [END sign_in_with_email]
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-        activityEmailAuthBinding.status.setText("OFFline");
-    }
-
-    private boolean validateForm() {
+    }*/
+    //    private void signOut() {
+//                если вход совершен
+//        mAuth.signOut();
+//        Toast.makeText(getApplicationContext(), "Sign out successful",
+//                Toast.LENGTH_LONG).show();
+//                 Если вход не совершен
+//    }
+  /*  public boolean validateForm() {
         boolean valid = true;
-
-//        if (TextUtils.isEmpty(email)) {
-        if (activityEmailAuthBinding.etEmail.getText().toString().isEmpty()) {
-            activityEmailAuthBinding.etEmail.setError("Required email.");
+        if (binding.etEmail.getText().toString().isEmpty()) {
+            binding.etEmail.setError("Required email");
             valid = false;
         } else {
-            activityEmailAuthBinding.etEmail.setError(null);
+            binding.etEmail.setError(null);
         }
-
-//        if (TextUtils.isEmpty(password)) {
-        if (activityEmailAuthBinding.etPassword.getText().toString().isEmpty()) {
-            activityEmailAuthBinding.etPassword.setError("Required.");
+        if (binding.etPassword.getText().toString().isEmpty()) {
+            binding.etPassword.setError("Required password");
             valid = false;
         } else {
-            activityEmailAuthBinding.etPassword.setError(null);
+            binding.etPassword.setError(null);
         }
-
         return valid;
+    }*/
+
+    public void goToAnotherActivity(Class activity, String name, String value){
+        Intent intent = new Intent(this, activity);
+        intent.putExtra(name, value);
+        startActivity(intent);
+    }
+
+    public void showToast(String toastMessage){
+        Toast.makeText(getApplicationContext(), toastMessage,
+                                Toast.LENGTH_LONG).show();
     }
 
    /* private void updateUI(FirebaseUser user) {
@@ -204,44 +168,5 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
             mBinding.signedInButtons.setVisibility(View.GONE);
         }
     }*/
-
-
-
-
-
-
-
-
-    private void showLoginFailed(){
-//        TODO
-        Toast.makeText(getApplicationContext(),"LogIn failed", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void showError() {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.app_name)
-                .setMessage("Что-то")
-//                .setOnCancelListener(dialog -> mRepositoriesPresenter.onErrorCancel())
-                .show();
-    }
-    @Override
-    public void checkEmail(){
-        if (activityEmailAuthBinding.etEmail.getText().toString().isEmpty()){
-            activityEmailAuthBinding.etEmail.setError("f");
-        }
-
-//        if else проверка на валидность
-    }
-
-    @Override
-    public void checkPassword() {
-        if (activityEmailAuthBinding.etPassword.getText().toString().isEmpty()){
-            activityEmailAuthBinding.etPassword.setError("a");
-        }
-        //        if else проверка на валидность
-    }
-
-
 
 }

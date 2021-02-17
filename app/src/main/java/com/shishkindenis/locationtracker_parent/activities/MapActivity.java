@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
@@ -16,13 +15,11 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
+import com.shishkindenis.locationtracker_parent.presenters.EmailAuthPresenter;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
@@ -33,15 +30,13 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     private ActivityMapBinding activityMapBinding;
 
-
     String TAG = "TAG";
     FirebaseFirestore firestoreDataBase;
+//    Убрать public
     public Double longitude = -34.0;
     public Double latitude = 151.0;
-
+    public String time;
     private GoogleMap mMap;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +53,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
     }
-
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
@@ -79,29 +73,28 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
 
     public  void readLocation(){
 
-        firestoreDataBase.collection(EmailAuthActivity.userID)
+//        А ЕСЛИ ЧЕРЕЗ ТЕЛЕФОН?
+//        firestoreDataBase.collection(EmailAuthActivity.userID)
+        firestoreDataBase.collection(EmailAuthPresenter.userID)
                 .whereEqualTo("Date",CalendarActivity.sDate)
                 .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                Log.d(TAG, document.getId() + " => " + document.getData());
-
-                                longitude = (Double) document.get("Longitude");
-                                latitude = (Double) document.get("Latitude");
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+//Удалить
+                            Log.d(TAG, document.getId() + " => " + document.getData());
+//                                Вынести в отдельный метод
+                            longitude = (Double) document.get("Longitude");
+                            latitude = (Double) document.get("Latitude");
+                            time = (String) document.get("Time");
 
 //                                Вынести в отдельный метод
-                                LatLng someplace = new LatLng(latitude, longitude);
-                                mMap.addMarker(new MarkerOptions().position(someplace).title("Marker in Someplace").snippet(latitude.toString() + "\n" + longitude.toString()));
-                                mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
-
-                            }
-
-                        } else {
-                            Log.w(TAG, "Error getting documents.", task.getException());
+                            LatLng someplace = new LatLng(latitude, longitude);
+                            mMap.addMarker(new MarkerOptions().position(someplace).title(time));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
                         }
+                    } else {
+                        Log.w(TAG, "Error getting documents.", task.getException());
                     }
                 });
     }
