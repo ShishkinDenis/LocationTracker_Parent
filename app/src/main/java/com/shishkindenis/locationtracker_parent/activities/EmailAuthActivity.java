@@ -1,7 +1,9 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Toast;
 
@@ -20,7 +22,7 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
 
     private ActivityEmailAuthBinding binding;
 
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
 
     private String email;
     private String password;
@@ -29,18 +31,13 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityEmailAuthBinding.inflate(getLayoutInflater());
+        auth = FirebaseAuth.getInstance();
         View view = binding.getRoot();
         setContentView(view);
 
-        mAuth = FirebaseAuth.getInstance();
-
         email = binding.etEmail.getText().toString();
         password = binding.etPassword.getText().toString();
-//        binding.btnRegister.setOnClickListener(v -> createAccount(binding.etEmail.getText().toString(),
-//                binding.etPassword.getText().toString()));
-        //        binding.btnLogin.setOnClickListener(v -> signIn(binding.etEmail.getText().toString(),
-//                binding.etPassword.getText().toString()));
-        //        binding.btnSignOut.setOnClickListener(v -> signOut());
+
         binding.btnRegister.setOnClickListener(v -> {
             if (binding.etEmail.getText().toString().isEmpty()) {
                 binding.etEmail.setError("Required email");
@@ -48,9 +45,8 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
 //            if else?
             if (binding.etPassword.getText().toString().isEmpty()) {
                 binding.etPassword.setError("Required password");
-            }
-            else {
-                emailAuthPresenter.createAccount(mAuth,binding.etEmail.getText().toString(),
+            } else {
+                emailAuthPresenter.createAccount(auth, binding.etEmail.getText().toString(),
                         binding.etPassword.getText().toString());
             }
         });
@@ -62,16 +58,26 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
 //            if else?
             if (binding.etPassword.getText().toString().isEmpty()) {
                 binding.etPassword.setError("Required password");
-            }
-            else {
-                emailAuthPresenter.signIn(mAuth,binding.etEmail.getText().toString(),
+            } else {
+                emailAuthPresenter.signIn(auth, binding.etEmail.getText().toString(),
                         binding.etPassword.getText().toString());
             }
         });
-        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(mAuth));
+        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(auth));
     }
 
-  /*  private void createAccount(String email, String password) {
+    public void goToAnotherActivity(Class activity, String name, String value) {
+        Intent intent = new Intent(this, activity);
+        intent.putExtra(name, value);
+        startActivity(intent);
+    }
+
+    public void showToast(String toastMessage) {
+        Toast.makeText(getApplicationContext(), toastMessage,
+                Toast.LENGTH_LONG).show();
+    }
+
+     /*  private void createAccount(String email, String password) {
 //        ЧТО значит пустой return?
         if (!validateForm()) {
             return;
@@ -132,41 +138,10 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
         return valid;
     }*/
 
-    public void goToAnotherActivity(Class activity, String name, String value){
-        Intent intent = new Intent(this, activity);
-        intent.putExtra(name, value);
-        startActivity(intent);
+    public void requestIgnoringBatteryOptimizations() {
+    Intent intent = new
+            Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+            Uri.parse("package:" + getPackageName()));
+    startActivity(intent);
     }
-
-    public void showToast(String toastMessage){
-        Toast.makeText(getApplicationContext(), toastMessage,
-                                Toast.LENGTH_LONG).show();
-    }
-
-   /* private void updateUI(FirebaseUser user) {
-        hideProgressBar();
-        if (user != null) {
-            mBinding.status.setText(getString(R.string.emailpassword_status_fmt,
-                    user.getEmail(), user.isEmailVerified()));
-            mBinding.detail.setText(getString(R.string.firebase_status_fmt, user.getUid()));
-
-            mBinding.emailPasswordButtons.setVisibility(View.GONE);
-            mBinding.emailPasswordFields.setVisibility(View.GONE);
-            mBinding.signedInButtons.setVisibility(View.VISIBLE);
-
-            if (user.isEmailVerified()) {
-                mBinding.verifyEmailButton.setVisibility(View.GONE);
-            } else {
-                mBinding.verifyEmailButton.setVisibility(View.VISIBLE);
-            }
-        } else {
-            mBinding.status.setText(R.string.signed_out);
-            mBinding.detail.setText(null);
-
-            mBinding.emailPasswordButtons.setVisibility(View.VISIBLE);
-            mBinding.emailPasswordFields.setVisibility(View.VISIBLE);
-            mBinding.signedInButtons.setVisibility(View.GONE);
-        }
-    }*/
-
 }

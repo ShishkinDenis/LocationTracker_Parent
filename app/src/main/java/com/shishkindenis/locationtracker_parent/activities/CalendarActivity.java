@@ -37,6 +37,8 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
+
+//            сделать гетер
             sDate = sdf.format(calendar.getTime());
 
 //            Toast.makeText(getApplicationContext(), sDate, Toast.LENGTH_LONG).show();
@@ -46,7 +48,6 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             Intent intent = new Intent(this, MapActivity.class);
             intent.putExtra("abc9", "abc9");
             startActivity(intent);
-
         });
     }
     public void showAlertDialog() {

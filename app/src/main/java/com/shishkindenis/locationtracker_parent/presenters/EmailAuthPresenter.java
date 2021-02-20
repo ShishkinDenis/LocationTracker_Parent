@@ -1,6 +1,6 @@
-package com.shishkindenis.locationtracker_parent.presenters;
+ package com.shishkindenis.locationtracker_parent.presenters;
 
-import com.google.firebase.auth.FirebaseAuth;
+ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shishkindenis.locationtracker_parent.activities.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
@@ -31,7 +31,10 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
 //                        if user !=null
-                        userID = user.getUid();
+//                        userID = user.getUid();
+
+
+
                         getViewState().showToast("Authentication successful");
                         getViewState().goToAnotherActivity(CalendarActivity.class,"abc3","abc3");
                     } else {
