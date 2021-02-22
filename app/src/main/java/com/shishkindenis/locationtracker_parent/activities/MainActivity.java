@@ -32,9 +32,10 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         //            сделать гетер
-        userID = user.getUid();
+
 
         if (user != null) {
+            userID = user.getUid();
             goToAnotherActivity(CalendarActivity.class,"abc", "abc");
         }
 

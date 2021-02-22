@@ -119,7 +119,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
                         }
                     } else {
                         Log.w(TAG, "Error getting documents.", task.getException());
-
                     }
                 });
     }
