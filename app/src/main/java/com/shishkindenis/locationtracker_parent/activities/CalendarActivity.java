@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityCalendarBinding;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
 
@@ -16,8 +17,7 @@ import moxy.MvpAppCompatActivity;
 public class CalendarActivity extends MvpAppCompatActivity implements CalendarView {
     private ActivityCalendarBinding activityCalendarBinding;
 
-    public static String sDate;
-
+    private static String date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,27 +33,25 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             int mMonth = month;
             int mDay = dayOfMonth;
 
-//Вынести в метод паттерн с датой
             final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
-
-//            сделать гетер
-            sDate = sdf.format(calendar.getTime());
-
-//            Toast.makeText(getApplicationContext(), sDate, Toast.LENGTH_LONG).show();
+            date = sdf.format(calendar.getTime());
         });
-
         activityCalendarBinding.btnGoToMapFromCalendar.setOnClickListener(v -> {
             Intent intent = new Intent(this, MapActivity.class);
-            intent.putExtra("abc9", "abc9");
             startActivity(intent);
         });
     }
+
+    public static String getDate() {
+        return date;
+    }
+
     public void showAlertDialog() {
         new AlertDialog.Builder(this)
-                .setMessage("Please choose the date of tracking")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setMessage(R.string.choose_the_date_of_tracking)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                 })
                 .show();
     }

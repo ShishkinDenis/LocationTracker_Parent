@@ -7,4 +7,7 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class CalendarPresenter extends MvpPresenter<CalendarView> {
+
+    public CalendarPresenter() {
+    }
 }

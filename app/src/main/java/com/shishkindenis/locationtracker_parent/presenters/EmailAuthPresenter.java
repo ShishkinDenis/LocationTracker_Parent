@@ -1,7 +1,8 @@
- package com.shishkindenis.locationtracker_parent.presenters;
+package com.shishkindenis.locationtracker_parent.presenters;
 
- import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.activities.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
 
@@ -10,44 +11,42 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
-    public static String userID;
 
-    public EmailAuthPresenter() {}
+    public EmailAuthPresenter() {
+    }
 
-    public void createAccount(FirebaseAuth auth,String email, String password) {
+    public void createAccount(FirebaseAuth auth, String email, String password) {
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        getViewState().showToast("User with email: " + email + " was signed up");
+                        getViewState().showToastWithEmail("User with email: " + email + " was signed up ");
                     } else {
-                        getViewState().showToast("Signing up failed. Check your internet connection");
+                        getViewState().showToast(R.string.signing_up_failed);
                     }
                 });
     }
 
-    public void signIn(FirebaseAuth auth,String email, String password) {
+    public void signIn(FirebaseAuth auth, String email, String password) {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = auth.getCurrentUser();
-//                        if user !=null
-//                        userID = user.getUid();
-
-
-
-                        getViewState().showToast("Authentication successful");
-                        getViewState().goToAnotherActivity(CalendarActivity.class,"abc3","abc3");
+                        getViewState().showToast(R.string.authentication_successful);
+                        getViewState().goToAnotherActivity(CalendarActivity.class);
                     } else {
-                        getViewState().showToast("Authentication failed");
+                        getViewState().showToast((R.string.authentication_failed));
                     }
                 });
     }
 
     public void signOut(FirebaseAuth auth) {
-        //        если вход совершен
-        auth.signOut();
-        getViewState().showToast("Sign out successful");
-        //         Если вход не совершен
+        if(auth.getCurrentUser() != null) {
+            auth.signOut();
+            getViewState().showToast(R.string.sign_out_successful);
+        }
+        else {
+            getViewState().showToast(R.string.you_havent_sign_in);
+        }
     }
 
 }

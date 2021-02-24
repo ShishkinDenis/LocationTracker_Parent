@@ -20,7 +20,7 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
     private ActivityMainBinding activityMainBinding;
     private FirebaseAuth mAuth;
-    public static String userID;
+    private static String userID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,26 +31,22 @@ public class MainActivity extends MvpAppCompatActivity implements MainView {
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
-        //            сделать гетер
-
 
         if (user != null) {
             userID = user.getUid();
-            goToAnotherActivity(CalendarActivity.class,"abc", "abc");
+            goToAnotherActivity(CalendarActivity.class);
         }
 
-        activityMainBinding.btnEmail.setOnClickListener(v -> {
-                goToAnotherActivity(EmailAuthActivity.class, "abc", "abc");
-        });
-
-        activityMainBinding.btnPhone.setOnClickListener(v -> {
-            goToAnotherActivity(PhoneAuthActivity.class,"abc2","abc2");
-        });
+        activityMainBinding.btnEmail.setOnClickListener(v -> goToAnotherActivity(EmailAuthActivity.class));
+        activityMainBinding.btnPhone.setOnClickListener(v -> goToAnotherActivity(PhoneAuthActivity.class));
     }
 
-    public void goToAnotherActivity(Class activity, String name, String value){
+    public static String getUserID() {
+        return userID;
+    }
+
+    public void goToAnotherActivity(Class activity) {
         Intent intent = new Intent(this, activity);
-        intent.putExtra(name, value);
         startActivity(intent);
     }
 }

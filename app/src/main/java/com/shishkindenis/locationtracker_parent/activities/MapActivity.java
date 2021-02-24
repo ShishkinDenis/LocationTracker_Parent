@@ -24,7 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
 
 
 //    Разобраться с extends FragmentActivity
@@ -32,16 +32,18 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
 //    @InjectPresenter
 //    MapPresenter mapPresenter;
 
-    private ActivityMapBinding activityMapBinding;
-
-    String TAG = "Location";
     FirebaseFirestore firestoreDataBase;
-    //    Убрать public
-    public Double longitude = -34.0;
-    public Double latitude = 151.0;
-    public String time;
-    private GoogleMap mMap;
     PolylineOptions polylineOptions;
+    private final String TAG = "Location";
+    private Double longitude;
+    private Double latitude;
+    private String time;
+    private ActivityMapBinding activityMapBinding;
+    private GoogleMap mMap;
+    final static String LONGITUDE_FIELD = "Longitude";
+    final static String LATITUDE_FIELD = "Latitude";
+    final static String TIME_FIELD = "Time";
+    final static String DATE_FIELD = "Date";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,22 +53,17 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
         setContentView(view);
 
         firestoreDataBase = FirebaseFirestore.getInstance();
-
-        polylineOptions  = new PolylineOptions();
-
+        polylineOptions = new PolylineOptions();
         readLocation();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setCompassEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
@@ -77,44 +74,21 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-
     }
 
     public void readLocation() {
-
-//        А ЕСЛИ ЧЕРЕЗ ТЕЛЕФОН?
-//        firestoreDataBase.collection(EmailAuthActivity.userID)
-//        firestoreDataBase.collection(EmailAuthPresenter.userID)
-        firestoreDataBase.collection(MainActivity.userID)
-                .whereEqualTo("Date", CalendarActivity.sDate)
+        firestoreDataBase.collection(MainActivity.getUserID())
+                .whereEqualTo(DATE_FIELD, CalendarActivity.getDate())
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        if(task.getResult().isEmpty()){
-                            Log.d(TAG, "There is no track for chosen date");
+                        if (task.getResult().isEmpty()) {
                             showAlertDialog();
-                        }
-                    else{
+                        } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-//Удалить
-
-                                    Log.d(TAG, "Document exists");
-                                    Log.d(TAG, document.getId() + " => " + document.getData());
-//                                Вынести в отдельный метод
-                                    longitude = (Double) document.get("Longitude");
-                                    latitude = (Double) document.get("Latitude");
-                                    time = (String) document.get("Time");
-
-//                                Вынести в отдельный метод
-                                    LatLng someplace = new LatLng(latitude, longitude);
-                                    mMap.addMarker(new MarkerOptions().position(someplace).title(time));
-                                    mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
-                                    mMap.addPolyline(polylineOptions
-//                                    .clickable(true)
-                                            .color(Color.BLUE)
-                                            .width(3)
-                                            .add(new LatLng(latitude, longitude)));
-
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                getPosition(document);
+                                setTrack();
                             }
                         }
                     } else {
@@ -122,64 +96,31 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback{
                     }
                 });
     }
+
     public void showAlertDialog() {
         new AlertDialog.Builder(this)
-                .setMessage("There is no track for chosen date")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setMessage(R.string.there_is_no_track)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     Intent intent = new Intent(this, CalendarActivity.class);
-                    intent.putExtra("abc9", "abc9");
                     startActivity(intent);
                 })
                 .show();
     }
 
- /*   private static final int PATTERN_GAP_LENGTH_PX = 20;
-    private static final PatternItem DOT = new Dot();
-    private static final PatternItem GAP = new Gap(PATTERN_GAP_LENGTH_PX);
-    // Create a stroke pattern of a gap followed by a dot.
-    private static final List<PatternItem> PATTERN_POLYLINE_DOTTED = Arrays.asList(GAP, DOT);
-    private static final int COLOR_BLACK_ARGB = 0xff000000;
-    private static final int POLYLINE_STROKE_WIDTH_PX = 12;
-
-    @Override
-    public void onPolylineClick(Polyline polyline) {
-        // Flip from solid stroke to dotted stroke pattern.
-        if ((polyline.getPattern() == null) || (!polyline.getPattern().contains(DOT))) {
-            polyline.setPattern(PATTERN_POLYLINE_DOTTED);
-        } else {
-            // The default pattern is a solid stroke.
-            polyline.setPattern(null);
-        }
-
-        Toast.makeText(this, "Route type " + polyline.getTag().toString(),
-                Toast.LENGTH_SHORT).show();
-
+    public void setTrack(){
+        LatLng someplace = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(someplace).title(time));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
+        mMap.addPolyline(polylineOptions
+                .color(Color.BLUE)
+                .width(3)
+                .add(new LatLng(latitude, longitude)));
     }
 
-    private void stylePolyline(Polyline polyline) {
-        String type = "";
-        // Get the data object stored with the polyline.
-        if (polyline.getTag() != null) {
-            type = polyline.getTag().toString();
-        }
+    public void getPosition(QueryDocumentSnapshot document){
+        longitude = (Double) document.get(LONGITUDE_FIELD);
+        latitude = (Double) document.get(LATITUDE_FIELD);
+        time = (String) document.get(TIME_FIELD);
+    }
 
-        switch (type) {
-            // If no type is given, allow the API to use the default.
-            case "A":
-                // Use a custom bitmap as the cap at the start of the line.
-                polyline.setStartCap(
-                        new CustomCap(
-                                BitmapDescriptorFactory.fromResource(R.drawable.ic_launcher_background), 10));
-                break;
-            case "B":
-                // Use a round cap at the start of the line.
-                polyline.setStartCap(new RoundCap());
-                break;
-        }
-
-        polyline.setEndCap(new RoundCap());
-        polyline.setWidth(POLYLINE_STROKE_WIDTH_PX);
-        polyline.setColor(COLOR_BLACK_ARGB);
-        polyline.setJointType(JointType.ROUND);
-    }*/
 }

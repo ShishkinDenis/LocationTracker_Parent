@@ -6,4 +6,5 @@ import moxy.MvpPresenter;
 
 //@InjectViewState
 public class MapPresenter extends MvpPresenter<MapView> {
+    public MapPresenter() { }
 }

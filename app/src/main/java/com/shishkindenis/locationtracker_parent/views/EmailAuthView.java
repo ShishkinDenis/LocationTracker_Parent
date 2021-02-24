@@ -7,9 +7,12 @@ import moxy.viewstate.strategy.StateStrategyType;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface EmailAuthView extends MvpView {
 
-    void goToAnotherActivity(Class activity, String name, String value);
+    void goToAnotherActivity(Class activity);
 
-    void showToast(String toastMessage);
+    void showToast(int toastMessage);
+
+    void showToastWithEmail(String toastMessage);
+
 
 }
 
