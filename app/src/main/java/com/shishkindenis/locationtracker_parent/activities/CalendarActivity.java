@@ -3,8 +3,14 @@ package com.shishkindenis.locationtracker_parent.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseAuth;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityCalendarBinding;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
@@ -19,12 +25,15 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
 
     private static String date;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activityCalendarBinding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View calendarActivityView = activityCalendarBinding.getRoot();
         setContentView(calendarActivityView);
+
+        setSupportActionBar(activityCalendarBinding.toolbar);
 
         showAlertDialog();
 
@@ -39,9 +48,21 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             date = sdf.format(calendar.getTime());
         });
         activityCalendarBinding.btnGoToMapFromCalendar.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MapActivity.class);
-            startActivity(intent);
+            goToAnotherActivity(MapActivity.class);
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        signOut();
+       goToAnotherActivity(MainActivity.class);
+        return super.onOptionsItemSelected(item);
     }
 
     public static String getDate() {
@@ -55,4 +76,21 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
                 })
                 .show();
     }
+
+    public void signOut() {
+       FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signOut();
+        showToast(R.string.sign_out_successful);
+    }
+
+    public void goToAnotherActivity(Class activity) {
+        Intent intent = new Intent(this, activity);
+        startActivity(intent);
+    }
+
+    public void showToast(int toastMessage) {
+        Toast.makeText(getApplicationContext(), toastMessage,
+                Toast.LENGTH_LONG).show();
+    }
+
 }

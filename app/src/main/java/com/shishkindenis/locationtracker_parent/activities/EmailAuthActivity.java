@@ -41,7 +41,7 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
                         binding.etPassword.getText().toString());
             }
         });
-        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(auth));
+//        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(auth));
     }
 
     public void goToAnotherActivity(Class activity) {

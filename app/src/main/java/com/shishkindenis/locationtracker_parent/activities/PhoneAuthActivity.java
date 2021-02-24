@@ -55,7 +55,7 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
         activityPhoneAuthBinding.btnVerifyCode.setOnClickListener(v -> verifyPhoneNumberWithCode(
                 mVerificationId, activityPhoneAuthBinding.etVerificationCode.getText().toString()));
 
-        activityPhoneAuthBinding.btnSignOut.setOnClickListener(v -> signOut());
+//        activityPhoneAuthBinding.btnSignOut.setOnClickListener(v -> signOut());
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -142,18 +142,18 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
 //        }
     }
 
-    private void signOut(){
-
-        if(auth.getCurrentUser() != null) {
-            auth.signOut();
-            showToast(R.string.sign_out_successful);
-//            getViewState().showToast(R.string.sign_out_successful);
-        }
-        else {
-          showToast(R.string.you_havent_sign_in);
-//            getViewState().showToast(R.string.you_havent_sign_in);
-        }
-    }
+//    private void signOut(){
+//
+//        if(auth.getCurrentUser() != null) {
+//            auth.signOut();
+//            showToast(R.string.sign_out_successful);
+////            getViewState().showToast(R.string.sign_out_successful);
+//        }
+//        else {
+//          showToast(R.string.you_havent_sign_in);
+////            getViewState().showToast(R.string.you_havent_sign_in);
+//        }
+//    }
 
     public void goToAnotherActivity(Class activity){
         Intent intent = new Intent(this, activity);

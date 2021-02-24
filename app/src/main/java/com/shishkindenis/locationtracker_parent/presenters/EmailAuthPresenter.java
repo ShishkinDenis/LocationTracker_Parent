@@ -39,14 +39,14 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
                 });
     }
 
-    public void signOut(FirebaseAuth auth) {
-        if(auth.getCurrentUser() != null) {
-            auth.signOut();
-            getViewState().showToast(R.string.sign_out_successful);
-        }
-        else {
-            getViewState().showToast(R.string.you_havent_sign_in);
-        }
-    }
+//    public void signOut(FirebaseAuth auth) {
+//        if(auth.getCurrentUser() != null) {
+//            auth.signOut();
+//            getViewState().showToast(R.string.sign_out_successful);
+//        }
+//        else {
+//            getViewState().showToast(R.string.you_havent_sign_in);
+//        }
+//    }
 
 }

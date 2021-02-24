@@ -6,19 +6,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
+    android:backgroundTint="#2196F3"
     tools:context=".activities.EmailAuthActivity">
 
     <EditText
         android:id="@+id/etEmail"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="96dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="16dp"
         android:hint="@string/prompt_email"
         android:inputType="textEmailAddress"
         android:selectAllOnFocus="true"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -26,72 +28,59 @@
         android:id="@+id/etPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="24dp"
+        android:layout_marginTop="40dp"
         android:hint="@string/prompt_password"
         android:imeActionLabel="@string/action_sign_in_short"
         android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:selectAllOnFocus="true"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etEmail" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/etEmail"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/etEmail"
+        app:layout_constraintTop_toBottomOf="@+id/etEmail"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/btnLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="start"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="120dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#2196F3"
         android:enabled="true"
         android:text="@string/action_sign_in"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etPassword"
-        app:layout_constraintVertical_bias="0.202" />
+        app:layout_constraintStart_toStartOf="@+id/etPassword"
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <ProgressBar
         android:id="@+id/pbLoading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="64dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="64dp"
+        android:layout_marginTop="36dp"
+
         android:visibility="visible"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.302" />
+        app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <Button
         android:id="@+id/btnRegister"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="#2196F3"
         android:text="Sign Up"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.805"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.428" />
-
-    <Button
-        android:id="@+id/btnSignOut"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="104dp"
-        android:layout_marginTop="152dp"
-        android:text="Sign Out"
+        android:textColor="#FFFFFF"
+        app:layout_constraintEnd_toEndOf="@+id/btnLogin"
         app:layout_constraintStart_toStartOf="@+id/btnLogin"
         app:layout_constraintTop_toBottomOf="@+id/btnLogin" />
 
