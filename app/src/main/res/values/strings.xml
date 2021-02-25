@@ -24,4 +24,16 @@
     <string name="verification_failed">Verification failed</string>
     <string name="invalid_phone_number">Invalid phone number</string>
     <string name="quota_exceeded">Quota exceeded</string>
+    <string name="cannot_be_empty">Cannot be empty</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="phone">Phone</string>
+    <string name="location_tracker">Location Tracker</string>
+    <string name="please_choose_the_way_of_signing_in">Please choose the way of signing in</string>
+    <string name="tv_welcome">Welcome !</string>
+    <string name="phone_number">Phone number</string>
+    <string name="verification_code">Verification code</string>
+    <string name="verify_code">Verify Code</string>
+    <string name="request_code">Request Code</string>
+    <string name="parent_edition">Parent edition</string>
 </resources>

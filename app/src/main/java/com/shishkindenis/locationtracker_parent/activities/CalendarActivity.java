@@ -24,6 +24,7 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
     private ActivityCalendarBinding activityCalendarBinding;
 
     private static String date;
+    private String datePattern = "yyyy-MM-dd";
 
 
     @Override
@@ -42,7 +43,7 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
             int mMonth = month;
             int mDay = dayOfMonth;
 
-            final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            final SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
             date = sdf.format(calendar.getTime());

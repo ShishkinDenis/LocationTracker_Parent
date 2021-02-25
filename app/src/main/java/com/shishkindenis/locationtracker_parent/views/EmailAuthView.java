@@ -13,6 +13,5 @@ public interface EmailAuthView extends MvpView {
 
     void showToastWithEmail(String toastMessage);
 
-
 }
 

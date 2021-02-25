@@ -59,13 +59,13 @@
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
 
     <ProgressBar
-        android:id="@+id/pbLoading"
+        android:id="@+id/pbEmailAuth"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="36dp"
 
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="@+id/etPassword"
         app:layout_constraintStart_toStartOf="@+id/etPassword"
         app:layout_constraintTop_toBottomOf="@+id/etPassword" />
@@ -78,7 +78,7 @@
         android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
         android:backgroundTint="#2196F3"
-        android:text="Sign Up"
+        android:text="@string/sign_up"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/btnLogin"
         app:layout_constraintStart_toStartOf="@+id/btnLogin"
