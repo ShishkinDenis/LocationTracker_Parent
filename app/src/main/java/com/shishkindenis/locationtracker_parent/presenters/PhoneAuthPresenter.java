@@ -19,10 +19,11 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
-    public String mVerificationId;
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    public String mVerificationId;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
+
     public PhoneAuthPresenter() {
     }
 
@@ -77,6 +78,5 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
         signInWithPhoneAuthCredential(credential);
     }
-
 
 }

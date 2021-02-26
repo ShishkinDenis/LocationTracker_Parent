@@ -23,13 +23,15 @@ import moxy.presenter.InjectPresenter;
 
 public class CalendarActivity extends MvpAppCompatActivity implements CalendarView {
 
+    private static String date;
+    private final String datePattern = "yyyy-MM-dd";
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-
     private ActivityCalendarBinding activityCalendarBinding;
-    private static String date;
-    private String datePattern = "yyyy-MM-dd";
 
+    public static String getDate() {
+        return date;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,19 +61,15 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-    getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         calendarPresenter.signOut();
-       goToAnotherActivity(MainActivity.class);
+        goToAnotherActivity(MainActivity.class);
         return super.onOptionsItemSelected(item);
-    }
-
-    public static String getDate() {
-        return date;
     }
 
     public void showAlertDialog() {
@@ -81,7 +79,6 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
                 })
                 .show();
     }
-
 
     @Override
     public void goToAnotherActivity(Class activity) {

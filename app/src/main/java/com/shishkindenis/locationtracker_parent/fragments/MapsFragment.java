@@ -15,7 +15,7 @@ import com.shishkindenis.locationtracker_parent.R;
 
 public class MapsFragment extends Fragment {
 
-    private OnMapReadyCallback callback = googleMap -> {
+    private final OnMapReadyCallback callback = googleMap -> {
     };
 
     @Nullable

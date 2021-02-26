@@ -26,15 +26,14 @@ import moxy.presenter.InjectPresenter;
 
 public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ implements OnMapReadyCallback, MapView {
 
+    final static String DATE_FIELD = "Date";
+    private final String TAG = "Location";
     @InjectPresenter
     MapPresenter mapPresenter;
-
     FirebaseFirestore firestoreDataBase;
     PolylineOptions polylineOptions;
-    private final String TAG = "Location";
     private ActivityMapBinding activityMapBinding;
     private GoogleMap mMap;
-    final static String DATE_FIELD = "Date";
     //    private Double longitude;
 //    private Double latitude;
 //    private String time;
@@ -76,7 +75,6 @@ public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ imple
     }
 
     public void readLocation() {
-//        firestoreDataBase.collection(MainActivity.getUserID())
 //        Вернуть геттер
         firestoreDataBase.collection(MainActivity.userID)
                 .whereEqualTo(DATE_FIELD, CalendarActivity.getDate())
