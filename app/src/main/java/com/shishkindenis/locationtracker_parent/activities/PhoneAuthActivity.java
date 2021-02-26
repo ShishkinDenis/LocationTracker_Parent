@@ -5,14 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-
-import com.google.firebase.FirebaseException;
-import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.shishkindenis.locationtracker_parent.R;
@@ -32,12 +25,6 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
 
     private ActivityPhoneAuthBinding binding;
     private FirebaseAuth auth;
-//    нужен этот булин?
-    private boolean mVerificationInProgress = false;
-    private boolean codeSent;
-    private String mVerificationId;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,50 +45,18 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
 
         binding.btnVerifyCode.setOnClickListener(v -> {
             binding.pbPhoneAuth.setVisibility(View.VISIBLE);
-                    if (validateCode()) {
-                        verifyPhoneNumberWithCode(
-                                mVerificationId, binding.etVerificationCode.getText().toString());
-                    }
+            if (validateCode()) {
+                phoneAuthPresenter.verifyPhoneNumberWithCode(
+
+                        phoneAuthPresenter.mVerificationId, binding.etVerificationCode.getText().toString());
+
+            }
             binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
         });
 
 
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(PhoneAuthCredential credential) {
-                mVerificationInProgress = false;
-                signInWithPhoneAuthCredential(credential);
-            }
-            @Override
-            public void onVerificationFailed(FirebaseException e) {
-                mVerificationInProgress = false;
-                if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                    binding.etPhoneNumber.setError(getString(R.string.invalid_phone_number));
-                } else if (e instanceof FirebaseTooManyRequestsException) {
-                    showToast(R.string.quota_exceeded);
-                }
-            }
-            @Override
-            public void onCodeSent(@NonNull String verificationId,
-                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                mVerificationId = verificationId;
-                mResendToken = token;
-//                codeSent = true;
-                binding.btnVerifyCode.setEnabled(true);
-            }
-        };
+        phoneAuthPresenter.callback();
     }
-
-    //        Почему onStart?
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//current user
-//        FirebaseUser currentUser = auth.getCurrentUser();
-//        if (mVerificationInProgress && validatePhoneNumber()) {
-//            startPhoneNumberVerification(activityPhoneAuthBinding.etPhoneNumber.getText().toString());
-//        }
-//    }
 
     private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthOptions options =
@@ -109,30 +64,10 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
                         .setPhoneNumber(phoneNumber)
                         .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(this)
-                        .setCallbacks(mCallbacks)
+//                        .setCallbacks(mCallbacks)
+                        .setCallbacks(phoneAuthPresenter.callback())
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
-        mVerificationInProgress = true;
-
-
-    }
-
-    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(this, task -> {
-                    if (task.isSuccessful()) {
-                        FirebaseUser user = task.getResult().getUser();
-                       showToast(R.string.authentication_successful);
-//                        getViewState().showToast(R.string.authentication_successful);
-                        goToAnotherActivity(CalendarActivity.class);
-                    } else {
-                   showToast((R.string.authentication_failed));
-//                        getViewState().showToast((R.string.authentication_failed));
-                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                            binding.etVerificationCode.setError(getString(R.string.invalid_code));
-                        }
-                    }
-                });
     }
 
     private boolean validatePhoneNumber() {
@@ -153,52 +88,31 @@ public class PhoneAuthActivity extends MvpAppCompatActivity implements PhoneAuth
         return true;
     }
 
-
-    private void verifyPhoneNumberWithCode(String verificationId, String code) {
-//        if (validatePhoneNumber()) {
-            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-            signInWithPhoneAuthCredential(credential);
-//        }
-//        else {
-//            showToast(R.string.verification_failed);
-//             getViewState().showToast(getString(R.string.verification_failed));
-//        }
-    }
-
-//    private void signOut(){
-//
-//        if(auth.getCurrentUser() != null) {
-//            auth.signOut();
-//            showToast(R.string.sign_out_successful);
-////            getViewState().showToast(R.string.sign_out_successful);
-//        }
-//        else {
-//          showToast(R.string.you_havent_sign_in);
-////            getViewState().showToast(R.string.you_havent_sign_in);
-//        }
-//    }
-
-    public void goToAnotherActivity(Class activity){
+    @Override
+    public void goToAnotherActivity(Class activity) {
         Intent intent = new Intent(this, activity);
         startActivity(intent);
     }
 
-    public void showToast(int toastMessage){
+    @Override
+    public void showToast(int toastMessage) {
         Toast.makeText(getApplicationContext(), toastMessage,
                 Toast.LENGTH_LONG).show();
     }
 
-//    TODO Resending Code
-//    private void resendVerificationCode(String phoneNumber,
-//                                        PhoneAuthProvider.ForceResendingToken token) {
-//        PhoneAuthOptions options =
-//                PhoneAuthOptions.newBuilder(mAuth)
-//                        .setPhoneNumber(phoneNumber)       // Phone number to verify
-//                        .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-//                        .setActivity(this)                 // Activity (for callback binding)
-//                        .setCallbacks(mCallbacks)          // OnVerificationStateChangedCallbacks
-//                        .setForceResendingToken(token)     // ForceResendingToken from callbacks
-//                        .build();
-//        PhoneAuthProvider.verifyPhoneNumber(options);
-//    }
+    @Override
+    public void enableVerifyButton() {
+        binding.btnVerifyCode.setEnabled(true);
+    }
+
+    @Override
+    public void showInvalidPhoneNumberError() {
+        binding.etPhoneNumber.setError(getString(R.string.invalid_phone_number));
+    }
+
+    @Override
+    public void showInvalidCodeError() {
+        binding.etVerificationCode.setError(getString(R.string.invalid_code));
+    }
+
 }

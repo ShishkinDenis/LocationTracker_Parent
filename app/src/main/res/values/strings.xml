@@ -23,7 +23,7 @@
     <string name="invalid_code">Invalid code</string>
     <string name="verification_failed">Verification failed</string>
     <string name="invalid_phone_number">Invalid phone number</string>
-    <string name="quota_exceeded">Quota exceeded</string>
+    <string name="quota_exceeded">Quota exceeded. Try later</string>
     <string name="cannot_be_empty">Cannot be empty</string>
     <string name="sign_up">Sign Up</string>
     <string name="email">Email</string>

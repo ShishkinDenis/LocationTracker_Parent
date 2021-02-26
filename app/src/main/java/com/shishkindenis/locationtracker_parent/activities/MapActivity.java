@@ -1,49 +1,46 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
+import com.shishkindenis.locationtracker_parent.presenters.MapPresenter;
+import com.shishkindenis.locationtracker_parent.views.MapView;
 
-public class MapActivity extends FragmentActivity implements OnMapReadyCallback {
+import moxy.presenter.InjectPresenter;
 
+public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ implements OnMapReadyCallback, MapView {
 
-//    Разобраться с extends FragmentActivity
-
-//    @InjectPresenter
-//    MapPresenter mapPresenter;
+    @InjectPresenter
+    MapPresenter mapPresenter;
 
     FirebaseFirestore firestoreDataBase;
     PolylineOptions polylineOptions;
     private final String TAG = "Location";
-    private Double longitude;
-    private Double latitude;
-    private String time;
     private ActivityMapBinding activityMapBinding;
     private GoogleMap mMap;
-    final static String LONGITUDE_FIELD = "Longitude";
-    final static String LATITUDE_FIELD = "Latitude";
-    final static String TIME_FIELD = "Time";
     final static String DATE_FIELD = "Date";
+    //    private Double longitude;
+//    private Double latitude;
+//    private String time;
+    //    final static String LONGITUDE_FIELD = "Longitude";
+//    final static String LATITUDE_FIELD = "Latitude";
+//    final static String TIME_FIELD = "Time";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +52,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
         firestoreDataBase = FirebaseFirestore.getInstance();
         polylineOptions = new PolylineOptions();
         readLocation();
+
+//        mapPresenter.readLocation(mMap);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -77,7 +76,9 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
     }
 
     public void readLocation() {
-        firestoreDataBase.collection(MainActivity.getUserID())
+//        firestoreDataBase.collection(MainActivity.getUserID())
+//        Вернуть геттер
+        firestoreDataBase.collection(MainActivity.userID)
                 .whereEqualTo(DATE_FIELD, CalendarActivity.getDate())
                 .get()
                 .addOnCompleteListener(task -> {
@@ -87,8 +88,8 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                getPosition(document);
-                                setTrack();
+                                mapPresenter.getPosition(document);
+                                mapPresenter.setTrack(mMap);
                             }
                         }
                     } else {
@@ -105,22 +106,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback 
                     startActivity(intent);
                 })
                 .show();
-    }
-
-    public void setTrack(){
-        LatLng someplace = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(someplace).title(time));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
-        mMap.addPolyline(polylineOptions
-                .color(Color.BLUE)
-                .width(3)
-                .add(new LatLng(latitude, longitude)));
-    }
-
-    public void getPosition(QueryDocumentSnapshot document){
-        longitude = (Double) document.get(LONGITUDE_FIELD);
-        latitude = (Double) document.get(LATITUDE_FIELD);
-        time = (String) document.get(TIME_FIELD);
     }
 
 }

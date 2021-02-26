@@ -46,7 +46,6 @@ public class EmailAuthActivity extends MvpAppCompatActivity implements EmailAuth
                 binding.pbEmailAuth.setVisibility(View.INVISIBLE);
             }
         });
-//        binding.btnSignOut.setOnClickListener(v -> emailAuthPresenter.signOut(auth));
     }
 
     public void goToAnotherActivity(Class activity) {

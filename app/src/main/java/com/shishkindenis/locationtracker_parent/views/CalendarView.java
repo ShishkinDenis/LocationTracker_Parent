@@ -6,4 +6,7 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface CalendarView extends MvpView {
+    void goToAnotherActivity(Class activity);
+
+    void showToast(int toastMessage);
 }

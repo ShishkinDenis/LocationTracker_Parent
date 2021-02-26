@@ -1,7 +1,10 @@
 package com.shishkindenis.locationtracker_parent.views;
 
 import moxy.MvpView;
+import moxy.viewstate.strategy.AddToEndSingleStrategy;
+import moxy.viewstate.strategy.StateStrategyType;
 
-//@StateStrategyType(AddToEndSingleStrategy.class)
+@StateStrategyType(AddToEndSingleStrategy.class)
 public interface MapView extends MvpView {
+
 }
