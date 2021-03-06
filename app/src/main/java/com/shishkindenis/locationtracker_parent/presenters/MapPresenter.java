@@ -1,13 +1,5 @@
 package com.shishkindenis.locationtracker_parent.presenters;
 
-import android.graphics.Color;
-
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.shishkindenis.locationtracker_parent.views.MapView;
 
 import moxy.InjectViewState;
@@ -15,13 +7,13 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class MapPresenter extends MvpPresenter<MapView> {
-    final static String LONGITUDE_FIELD = "Longitude";
-    final static String LATITUDE_FIELD = "Latitude";
-    final static String TIME_FIELD = "Time";
-    PolylineOptions polylineOptions = new PolylineOptions();
-    private Double longitude;
-    private Double latitude;
-    private String time;
+//    final static String LONGITUDE_FIELD = "Longitude";
+//    final static String LATITUDE_FIELD = "Latitude";
+//    final static String TIME_FIELD = "Time";
+//    PolylineOptions polylineOptions = new PolylineOptions();
+//    private Double longitude;
+//    private Double latitude;
+//    private String time;
 //    final static String DATE_FIELD = "Date";
 //    private final String TAG = "Location";
 
@@ -51,19 +43,19 @@ public class MapPresenter extends MvpPresenter<MapView> {
 //                });
 //    }
 
-    public void setTrack(GoogleMap mMap) {
-        LatLng someplace = new LatLng(latitude, longitude);
-        mMap.addMarker(new MarkerOptions().position(someplace).title(time));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
-        mMap.addPolyline(polylineOptions
-                .color(Color.BLUE)
-                .width(3)
-                .add(new LatLng(latitude, longitude)));
-    }
+//    public void setTrack(GoogleMap mMap) {
+//        LatLng someplace = new LatLng(latitude, longitude);
+//        mMap.addMarker(new MarkerOptions().position(someplace).title(time));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
+//        mMap.addPolyline(polylineOptions
+//                .color(Color.BLUE)
+//                .width(3)
+//                .add(new LatLng(latitude, longitude)));
+//    }
 
-    public void getPosition(QueryDocumentSnapshot document) {
-        longitude = (Double) document.get(LONGITUDE_FIELD);
-        latitude = (Double) document.get(LATITUDE_FIELD);
-        time = (String) document.get(TIME_FIELD);
-    }
+//    public void getPosition(QueryDocumentSnapshot document) {
+//        longitude = (Double) document.get(LONGITUDE_FIELD);
+//        latitude = (Double) document.get(LATITUDE_FIELD);
+//        time = (String) document.get(TIME_FIELD);
+//    }
 }

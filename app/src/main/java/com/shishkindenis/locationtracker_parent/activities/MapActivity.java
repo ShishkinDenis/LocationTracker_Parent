@@ -3,57 +3,87 @@ package com.shishkindenis.locationtracker_parent.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 
-import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.shishkindenis.locationtracker_parent.MyApplication;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
 import com.shishkindenis.locationtracker_parent.presenters.MapPresenter;
+import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
 import com.shishkindenis.locationtracker_parent.views.MapView;
+
+import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
 
-public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ implements OnMapReadyCallback, MapView {
+public class MapActivity extends FragmentActivity  implements OnMapReadyCallback, MapView {
 
-    final static String DATE_FIELD = "Date";
-    private final String TAG = "Location";
     @InjectPresenter
     MapPresenter mapPresenter;
-    FirebaseFirestore firestoreDataBase;
-    PolylineOptions polylineOptions;
-    private ActivityMapBinding activityMapBinding;
-    private GoogleMap mMap;
-    //    private Double longitude;
-//    private Double latitude;
-//    private String time;
-    //    final static String LONGITUDE_FIELD = "Longitude";
-//    final static String LATITUDE_FIELD = "Latitude";
-//    final static String TIME_FIELD = "Time";
+
+    @Inject
+    IdSingleton idSingleton;
+    String userId;
+
+    private static final String DATE_FIELD = "Date";
+    private static final String LONGITUDE_FIELD = "Longitude";
+    private static final String LATITUDE_FIELD = "Latitude";
+    private static final String TIME_FIELD = "Time";
+    private static final String TAG = "Location";
+
+    private FirebaseFirestore firestoreDataBase;
+    private PolylineOptions polylineOptions;
+    private String date;
+    private Intent intent;
+    private ActivityMapBinding binding;
+    private GoogleMap map;
+    private Double longitude;
+    private Double latitude;
+    private String time;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityMapBinding = ActivityMapBinding.inflate(getLayoutInflater());
-        View view = activityMapBinding.getRoot();
+        binding = ActivityMapBinding.inflate(getLayoutInflater());
+        View view = binding.getRoot();
         setContentView(view);
 
         firestoreDataBase = FirebaseFirestore.getInstance();
         polylineOptions = new PolylineOptions();
-        readLocation();
+
+        date = getIntent().getExtras().getString("Date");
+
+        intent = new Intent();
+
+        MyApplication.appComponent.inject(this);
+
+//        idSingleton = IdSingleton.getInstance();
+
+
+        userId = idSingleton.getUserId();
+
+
 
 //        mapPresenter.readLocation(mMap);
 
+
+        readLocation();
+//                            вынести в метод
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -61,33 +91,44 @@ public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ imple
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-        mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
+
+        map = googleMap;
+        map.getUiSettings().setZoomControlsEnabled(true);
+        map.getUiSettings().setCompassEnabled(true);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED
                 && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             return;
         }
-        mMap.setMyLocationEnabled(true);
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        map.setMyLocationEnabled(true);
+        map.getUiSettings().setMyLocationButtonEnabled(true);
     }
 
     public void readLocation() {
-//        Вернуть геттер
-        firestoreDataBase.collection(MainActivity.userID)
-                .whereEqualTo(DATE_FIELD, CalendarActivity.getDate())
+
+
+//        нужна единая строка с ID-для мейла,телефона,mainActivity -Singleton
+//        firestoreDataBase.collection(userId)
+        firestoreDataBase.collection(userId)
+//        firestoreDataBase.collection(id)
+                .whereEqualTo(DATE_FIELD, date)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
-                            showAlertDialog();
+//                            вынести в метод
+                            setResult(RESULT_CANCELED, intent);
+                            finish();
+
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                mapPresenter.getPosition(document);
-                                mapPresenter.setTrack(mMap);
+                                setResult(RESULT_OK, intent);
+//                                mapPresenter.getPosition(document);
+//                                mapPresenter.setTrack(mMap);
+                                getPosition(document);
+                                setTrack(map);
                             }
                         }
                     } else {
@@ -96,14 +137,30 @@ public class MapActivity extends FragmentActivity /*MvpAppCompatActivity*/ imple
                 });
     }
 
-    public void showAlertDialog() {
-        new AlertDialog.Builder(this)
-                .setMessage(R.string.there_is_no_track)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    Intent intent = new Intent(this, CalendarActivity.class);
-                    startActivity(intent);
-                })
-                .show();
+    public void setTrack(GoogleMap mMap) {
+        LatLng someplace = new LatLng(latitude, longitude);
+        mMap.addMarker(new MarkerOptions().position(someplace).title(time));
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(someplace));
+        mMap.addPolyline(polylineOptions
+                .color(Color.BLUE)
+                .width(3)
+                .add(new LatLng(latitude, longitude)));
     }
 
+    public void getPosition(QueryDocumentSnapshot document) {
+        longitude = (Double) document.get(LONGITUDE_FIELD);
+        latitude = (Double) document.get(LATITUDE_FIELD);
+        time = (String) document.get(TIME_FIELD);
+    }
+//    public void showAlertDialog() {
+//        new AlertDialog.Builder(this)
+//                .setMessage(R.string.there_is_no_track)
+//                .setPositiveButton(R.string.ok, (dialog, which) -> {
+//                    Intent intent = new Intent();
+//                    setResult(RESULT_OK, intent);
+//                    finish();
+//
+//                })
+//                .show();
+//    }
 }

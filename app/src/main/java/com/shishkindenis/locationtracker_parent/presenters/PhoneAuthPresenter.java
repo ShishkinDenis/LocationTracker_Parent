@@ -6,12 +6,16 @@ import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.shishkindenis.locationtracker_parent.MyApplication;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.activities.CalendarActivity;
-import com.shishkindenis.locationtracker_parent.activities.MainActivity;
+import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
 import com.shishkindenis.locationtracker_parent.views.PhoneAuthView;
+
+import javax.inject.Inject;
 
 import moxy.InjectViewState;
 import moxy.MvpPresenter;
@@ -19,19 +23,21 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
-    private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    public String mVerificationId;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
-    private PhoneAuthProvider.ForceResendingToken mResendToken;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
+    private String phoneVerificationId;
+    private PhoneAuthProvider.ForceResendingToken forceResendingToken;
 
-    public PhoneAuthPresenter() {
-    }
+    @Inject
+    IdSingleton idSingleton;
+    String userId;
 
-    public PhoneAuthProvider.OnVerificationStateChangedCallbacks callback() {
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+    public PhoneAuthPresenter() { }
+
+    public PhoneAuthProvider.OnVerificationStateChangedCallbacks phoneVerificationCallback(FirebaseAuth auth) {
+        callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
-                signInWithPhoneAuthCredential(credential);
+                signInWithPhoneAuthCredential(auth,credential);
             }
 
             @Override
@@ -46,21 +52,26 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
             @Override
             public void onCodeSent(@NonNull String verificationId,
                                    @NonNull PhoneAuthProvider.ForceResendingToken token) {
-                mVerificationId = verificationId;
-                mResendToken = token;
+                phoneVerificationId = verificationId;
+                forceResendingToken = token;
                 getViewState().enableVerifyButton();
             }
         };
-        return mCallbacks;
+        return callbacks;
     }
 
-    public void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+    private void signInWithPhoneAuthCredential(FirebaseAuth auth,PhoneAuthCredential credential) {
+        MyApplication.appComponent.inject(this);
+
         auth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-//                        FirebaseUser user = task.getResult().getUser();
-                        MainActivity.user = task.getResult().getUser();
-                        MainActivity.userID = MainActivity.user.getUid();
+
+                        FirebaseUser user = task.getResult().getUser();
+
+//                        idSingleton = IdSingleton.getInstance();
+                        userId = user.getUid();
+                        idSingleton.setUserId(userId);
 
                         getViewState().showToast(R.string.authentication_successful);
                         getViewState().goToAnotherActivity(CalendarActivity.class);
@@ -74,9 +85,9 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
                 });
     }
 
-    public void verifyPhoneNumberWithCode(String verificationId, String code) {
-        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, code);
-        signInWithPhoneAuthCredential(credential);
+    public void verifyPhoneNumberWithCode(FirebaseAuth auth,String code) {
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
+        signInWithPhoneAuthCredential(auth,credential);
     }
 
 }

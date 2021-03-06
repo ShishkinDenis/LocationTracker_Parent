@@ -6,9 +6,9 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityCalendarBinding;
@@ -18,45 +18,44 @@ import com.shishkindenis.locationtracker_parent.views.CalendarView;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
 
-public class CalendarActivity extends MvpAppCompatActivity implements CalendarView {
+public class CalendarActivity extends BaseActivity implements CalendarView {
 
-    private static String date;
-    private final String datePattern = "yyyy-MM-dd";
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-    private ActivityCalendarBinding activityCalendarBinding;
 
-    public static String getDate() {
-        return date;
-    }
+    private String date;
+    private String datePattern = "yyyy-MM-dd";
+    private ActivityCalendarBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activityCalendarBinding = ActivityCalendarBinding.inflate(getLayoutInflater());
-        View calendarActivityView = activityCalendarBinding.getRoot();
+        binding = ActivityCalendarBinding.inflate(getLayoutInflater());
+        View calendarActivityView = binding.getRoot();
         setContentView(calendarActivityView);
 
-        setSupportActionBar(activityCalendarBinding.toolbar);
+        setSupportActionBar(binding.toolbar);
 
         showAlertDialog();
 
-        activityCalendarBinding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            int mYear = year;
-            int mMonth = month;
-            int mDay = dayOfMonth;
+        binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
+            int calendarYear = year;
+            int calendarMonth = month;
+            int calendarDay = dayOfMonth;
 
-            final SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
+            SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
             Calendar calendar = Calendar.getInstance();
             calendar.set(year, month, dayOfMonth);
             date = sdf.format(calendar.getTime());
         });
-        activityCalendarBinding.btnGoToMapFromCalendar.setOnClickListener(v -> {
-            goToAnotherActivity(MapActivity.class);
-        });
+        binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToAnotherActivity(MapActivity.class));
+    }
+
+    @Override
+    public void showToast(int toastMessage) {
+        super.showToast(toastMessage);
     }
 
     @Override
@@ -83,13 +82,16 @@ public class CalendarActivity extends MvpAppCompatActivity implements CalendarVi
     @Override
     public void goToAnotherActivity(Class activity) {
         Intent intent = new Intent(this, activity);
-        startActivity(intent);
+        intent.putExtra("Date",date);
+        startActivityForResult(intent,1);
     }
 
     @Override
-    public void showToast(int toastMessage) {
-        Toast.makeText(getApplicationContext(), toastMessage,
-                Toast.LENGTH_LONG).show();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_CANCELED) {
+            showToast(R.string.there_is_no_track);
+        }
     }
 
 }
