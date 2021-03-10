@@ -22,12 +22,20 @@ import moxy.presenter.InjectPresenter;
 
 public class CalendarActivity extends BaseActivity implements CalendarView {
 
+    private static final String DATE_FIELD = "Date";
+    private static final String YEAR = "Year";
+    private static final String MONTH = "Month";
+    private static final String DAY = "Day";
+    private final String datePattern = "yyyy-MM-dd";
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-
+    private Intent intent;
     private String date;
-    private String datePattern = "yyyy-MM-dd";
     private ActivityCalendarBinding binding;
+    private Calendar calendar;
+    private int calendarYear;
+    private int calendarMonth;
+    private int calendarDay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,22 +43,36 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         binding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View calendarActivityView = binding.getRoot();
         setContentView(calendarActivityView);
-
+        intent = new Intent();
+        calendar = Calendar.getInstance();
         setSupportActionBar(binding.toolbar);
 
-        showAlertDialog();
+        if (savedInstanceState == null) {
+            showAlertDialog();
+        }
+
+        if (savedInstanceState != null) {
+            restoreChosenDate(savedInstanceState);
+        }
 
         binding.calendarView.setOnDateChangeListener((view, year, month, dayOfMonth) -> {
-            int calendarYear = year;
-            int calendarMonth = month;
-            int calendarDay = dayOfMonth;
+            calendarYear = year;
+            calendarMonth = month;
+            calendarDay = dayOfMonth;
+            calendar.set(calendarYear, calendarMonth, calendarDay);
 
             SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, dayOfMonth);
             date = sdf.format(calendar.getTime());
         });
         binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToAnotherActivity(MapActivity.class));
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(YEAR, calendarYear);
+        outState.putInt(MONTH, calendarMonth);
+        outState.putInt(DAY, calendarDay);
     }
 
     @Override
@@ -67,7 +89,8 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         calendarPresenter.signOut();
-        goToAnotherActivity(MainActivity.class);
+        setResult(RESULT_OK, intent);
+        finish();
         return super.onOptionsItemSelected(item);
     }
 
@@ -82,8 +105,8 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     @Override
     public void goToAnotherActivity(Class activity) {
         Intent intent = new Intent(this, activity);
-        intent.putExtra("Date",date);
-        startActivityForResult(intent,1);
+        intent.putExtra(DATE_FIELD, date);
+        startActivityForResult(intent, 1);
     }
 
     @Override
@@ -92,6 +115,17 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         if (resultCode == RESULT_CANCELED) {
             showToast(R.string.there_is_no_track);
         }
+    }
+
+    public void restoreChosenDate(Bundle savedInstanceState) {
+        calendarYear = savedInstanceState.getInt(YEAR);
+        calendarMonth = savedInstanceState.getInt(MONTH);
+        calendarDay = savedInstanceState.getInt(DAY);
+        calendar.set(Calendar.YEAR, calendarYear);
+        calendar.set(Calendar.MONTH, calendarMonth);
+        calendar.set(Calendar.DATE, calendarDay);
+        long time = calendar.getTimeInMillis();
+        binding.calendarView.setDate(time);
     }
 
 }

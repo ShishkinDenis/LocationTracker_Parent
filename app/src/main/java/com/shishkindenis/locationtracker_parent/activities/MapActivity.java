@@ -20,8 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.shishkindenis.locationtracker_parent.MyApplication;
 import com.shishkindenis.locationtracker_parent.R;
+import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
 import com.shishkindenis.locationtracker_parent.presenters.MapPresenter;
 import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
@@ -31,21 +31,18 @@ import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
 
-public class MapActivity extends FragmentActivity  implements OnMapReadyCallback, MapView {
+public class MapActivity extends FragmentActivity implements OnMapReadyCallback, MapView {
 
     @InjectPresenter
     MapPresenter mapPresenter;
-
     @Inject
     IdSingleton idSingleton;
-    String userId;
 
     private static final String DATE_FIELD = "Date";
     private static final String LONGITUDE_FIELD = "Longitude";
     private static final String LATITUDE_FIELD = "Latitude";
     private static final String TIME_FIELD = "Time";
     private static final String TAG = "Location";
-
     private FirebaseFirestore firestoreDataBase;
     private PolylineOptions polylineOptions;
     private String date;
@@ -55,6 +52,7 @@ public class MapActivity extends FragmentActivity  implements OnMapReadyCallback
     private Double longitude;
     private Double latitude;
     private String time;
+    private String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,30 +61,21 @@ public class MapActivity extends FragmentActivity  implements OnMapReadyCallback
         View view = binding.getRoot();
         setContentView(view);
 
+//        вынести в методы,что возможно
+
         firestoreDataBase = FirebaseFirestore.getInstance();
         polylineOptions = new PolylineOptions();
 
-        date = getIntent().getExtras().getString("Date");
-
+        date = getIntent().getExtras().getString(DATE_FIELD);
         intent = new Intent();
 
         MyApplication.appComponent.inject(this);
-
-//        idSingleton = IdSingleton.getInstance();
-
-
         userId = idSingleton.getUserId();
-
-
 
 //        mapPresenter.readLocation(mMap);
 
-
         readLocation();
-//                            вынести в метод
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        initMapsFragment();
     }
 
     @Override
@@ -106,24 +95,17 @@ public class MapActivity extends FragmentActivity  implements OnMapReadyCallback
     }
 
     public void readLocation() {
-
-
-//        нужна единая строка с ID-для мейла,телефона,mainActivity -Singleton
-//        firestoreDataBase.collection(userId)
         firestoreDataBase.collection(userId)
-//        firestoreDataBase.collection(id)
                 .whereEqualTo(DATE_FIELD, date)
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         if (task.getResult().isEmpty()) {
-//                            вынести в метод
-                            setResult(RESULT_CANCELED, intent);
-                            finish();
-
+                            backToCalendarActivity();
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
+//                                нужна эта строчка?
                                 setResult(RESULT_OK, intent);
 //                                mapPresenter.getPosition(document);
 //                                mapPresenter.setTrack(mMap);
@@ -152,15 +134,16 @@ public class MapActivity extends FragmentActivity  implements OnMapReadyCallback
         latitude = (Double) document.get(LATITUDE_FIELD);
         time = (String) document.get(TIME_FIELD);
     }
-//    public void showAlertDialog() {
-//        new AlertDialog.Builder(this)
-//                .setMessage(R.string.there_is_no_track)
-//                .setPositiveButton(R.string.ok, (dialog, which) -> {
-//                    Intent intent = new Intent();
-//                    setResult(RESULT_OK, intent);
-//                    finish();
-//
-//                })
-//                .show();
-//    }
+
+    public void backToCalendarActivity() {
+//        а точно canceled?
+        setResult(RESULT_CANCELED, intent);
+        finish();
+    }
+
+    public void initMapsFragment() {
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+    }
 }

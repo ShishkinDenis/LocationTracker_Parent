@@ -1,8 +1,8 @@
 package com.shishkindenis.locationtracker_parent.presenters;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.shishkindenis.locationtracker_parent.MyApplication;
 import com.shishkindenis.locationtracker_parent.R;
+import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
 
 import javax.inject.Inject;
@@ -24,5 +24,4 @@ public class CalendarPresenter extends MvpPresenter<CalendarView> {
         auth.signOut();
         getViewState().showToast(R.string.sign_out_successful);
     }
-
 }

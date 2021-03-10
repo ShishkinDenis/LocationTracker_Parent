@@ -1,4 +1,4 @@
-package com.shishkindenis.locationtracker_parent;
+package com.shishkindenis.locationtracker_parent.daggerUtils;
 
 import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
 
@@ -11,7 +11,7 @@ import dagger.Provides;
 public class IdSingletonModule {
     @Provides
     @Singleton
-    IdSingleton provideIdSingleton(){
+    IdSingleton provideIdSingleton() {
         return new IdSingleton();
     }
 }

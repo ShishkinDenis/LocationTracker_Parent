@@ -1,0 +1,100 @@
+package com.shishkindenis.locationtracker_parent.examples;
+
+//public class PhoneActivityBackup {
+//    public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
+//
+//        @InjectPresenter
+//        PhoneAuthPresenter phoneAuthPresenter;
+//
+//        @Inject
+//        FirebaseAuth auth;
+//        private boolean phoneNumberValid;
+//        private boolean codeValid;
+//
+//        private ActivityPhoneAuthBinding binding;
+//
+//        @Override
+//        protected void onCreate(Bundle savedInstanceState) {
+//            super.onCreate(savedInstanceState);
+//            binding = ActivityPhoneAuthBinding.inflate(getLayoutInflater());
+//            View view = binding.getRoot();
+//            setContentView(view);
+//
+//            MyApplication.appComponent.inject(this);
+//
+//            binding.btnRequestCode.setOnClickListener(v -> {
+//                binding.pbPhoneAuth.setVisibility(View.VISIBLE);
+//                if (validatePhoneNumber()) {
+//                    startPhoneNumberVerification(binding.etPhoneNumber.getText().toString());
+//                }
+//                binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
+//            });
+//            binding.btnVerifyCode.setOnClickListener(v -> {
+//                binding.pbPhoneAuth.setVisibility(View.VISIBLE);
+//                if (validateCode()) {
+//                    phoneAuthPresenter.verifyPhoneNumberWithCode(
+//                            auth, binding.etVerificationCode.getText().toString());
+//                }
+//                binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
+//            });
+//
+//            phoneAuthPresenter.phoneVerificationCallback(auth);
+//        }
+//
+//        @Override
+//        public void showToast(int toastMessage) {
+//            super.showToast(toastMessage);
+//        }
+//
+//        @Override
+//        public void goToAnotherActivity(Class activity) {
+//            super.goToAnotherActivity(activity);
+//        }
+//
+//        private void startPhoneNumberVerification(String phoneNumber) {
+//            PhoneAuthOptions options =
+//                    PhoneAuthOptions.newBuilder(auth)
+//                            .setPhoneNumber(phoneNumber)
+//                            .setTimeout(60L, TimeUnit.SECONDS)
+//                            .setActivity(this)
+//                            .setCallbacks(phoneAuthPresenter.phoneVerificationCallback(auth))
+//                            .build();
+//            PhoneAuthProvider.verifyPhoneNumber(options);
+//        }
+//
+//        private boolean validatePhoneNumber() {
+//            if (binding.etPhoneNumber.getText().toString().isEmpty()) {
+//                binding.etPhoneNumber.setError(getString(R.string.invalid_phone_number));
+//                showToast(R.string.invalid_phone_number);
+//                return false;
+//            }
+//            return true;
+//        }
+//
+//        //    Исправить по аналогии с email
+//        private boolean validateCode() {
+//            if (binding.etVerificationCode.getText().toString().isEmpty()) {
+//                binding.etVerificationCode.setError(getString(R.string.cannot_be_empty));
+//                showToast(R.string.cannot_be_empty);
+//                return false;
+//            }
+//            return true;
+//        }
+//
+//        @Override
+//        public void enableVerifyButton() {
+//            binding.btnVerifyCode.setEnabled(true);
+//        }
+//
+//        @Override
+//        public void showInvalidPhoneNumberError() {
+//            binding.etPhoneNumber.setError(getString(R.string.invalid_phone_number));
+//        }
+//
+//        @Override
+//        public void showInvalidCodeError() {
+//            binding.etVerificationCode.setError(getString(R.string.invalid_code));
+//        }
+//
+//    }
+//}

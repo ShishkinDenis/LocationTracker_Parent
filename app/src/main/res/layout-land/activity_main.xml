@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:text="@string/tv_welcome"
-        android:textSize="36sp"
+        android:textSize="@dimen/welcome_text_size"
         app:layout_constraintEnd_toEndOf="@+id/tvLocationTracker"
         app:layout_constraintHorizontal_bias="0.392"
         app:layout_constraintStart_toStartOf="@+id/tvLocationTracker"
@@ -54,7 +54,7 @@
         android:layout_width="298dp"
         android:layout_height="52dp"
         android:text="@string/location_tracker"
-        android:textSize="36sp"
+        android:textSize="@dimen/location_tracker_text_size"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.535"
@@ -68,7 +68,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/please_choose_the_way_of_signing_in"
-        android:textSize="18sp"
+        android:textSize="@dimen/choose_the_signing_way_text_size"
         app:layout_constraintEnd_toEndOf="@+id/tvWelcome"
         app:layout_constraintStart_toStartOf="@+id/tvWelcome"
         app:layout_constraintTop_toBottomOf="@+id/tvWelcome" />
@@ -114,39 +114,11 @@
         android:gravity="center|center_horizontal"
         android:text="@string/parent_edition"
         android:textColor="#03A9F4"
-        android:textSize="18sp"
+        android:textSize="@dimen/parent_edition_text_size"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvLocationTracker"
         app:layout_constraintHorizontal_bias="0.377"
         app:layout_constraintStart_toStartOf="@+id/tvLocationTracker"
         app:layout_constraintTop_toBottomOf="@+id/tvLocationTracker" />
-
-    <Button
-        android:id="@+id/btnBackToCalendar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="#00BCD4"
-        android:text="Back to Calendar"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.955" />
-
-    <ImageView
-        android:id="@+id/ivCalendar"
-        android:layout_width="43dp"
-        android:layout_height="42dp"
-        android:layout_marginStart="12dp"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@+id/btnBackToCalendar"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/btnBackToCalendar"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/ic_baseline_calendar_today_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
