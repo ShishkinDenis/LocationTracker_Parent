@@ -60,18 +60,12 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         View view = binding.getRoot();
         setContentView(view);
 
-//        вынести в методы,что возможно
-
         firestoreDataBase = FirebaseFirestore.getInstance();
         polylineOptions = new PolylineOptions();
-
         date = getIntent().getExtras().getString(DATE_FIELD);
         intent = new Intent();
-
         MyApplication.appComponent.inject(this);
         userId = idSingleton.getUserId();
-
-//        mapPresenter.readLocation(mMap);
 
         readLocation();
         initMapsFragment();
@@ -105,8 +99,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
                                 setResult(RESULT_OK, intent);
-//                                mapPresenter.getPosition(document);
-//                                mapPresenter.setTrack(mMap);
                                 getPosition(document);
                                 setTrack(map);
                             }
@@ -134,7 +126,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     }
 
     public void backToCalendarActivity() {
-//        а точно canceled?
         setResult(RESULT_CANCELED, intent);
         finish();
     }
