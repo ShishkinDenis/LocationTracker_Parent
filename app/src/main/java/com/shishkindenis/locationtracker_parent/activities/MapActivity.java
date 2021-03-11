@@ -33,16 +33,15 @@ import moxy.presenter.InjectPresenter;
 
 public class MapActivity extends FragmentActivity implements OnMapReadyCallback, MapView {
 
-    @InjectPresenter
-    MapPresenter mapPresenter;
-    @Inject
-    IdSingleton idSingleton;
-
     private static final String DATE_FIELD = "Date";
     private static final String LONGITUDE_FIELD = "Longitude";
     private static final String LATITUDE_FIELD = "Latitude";
     private static final String TIME_FIELD = "Time";
     private static final String TAG = "Location";
+    @InjectPresenter
+    MapPresenter mapPresenter;
+    @Inject
+    IdSingleton idSingleton;
     private FirebaseFirestore firestoreDataBase;
     private PolylineOptions polylineOptions;
     private String date;
@@ -105,7 +104,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-//                                нужна эта строчка?
                                 setResult(RESULT_OK, intent);
 //                                mapPresenter.getPosition(document);
 //                                mapPresenter.setTrack(mMap);

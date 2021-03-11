@@ -25,6 +25,7 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
     @Inject
     IdSingleton idSingleton;
+
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
     private String phoneVerificationId;
     private PhoneAuthProvider.ForceResendingToken forceResendingToken;
@@ -73,7 +74,6 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
                         getViewState().goToAnotherActivity(CalendarActivity.class);
                     } else {
                         getViewState().showToast((R.string.authentication_failed));
-
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             getViewState().showInvalidCodeError();
                         }

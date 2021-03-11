@@ -13,5 +13,4 @@ public class FirebaseAuthModule {
     FirebaseAuth provideAuth() {
         return auth;
     }
-
 }

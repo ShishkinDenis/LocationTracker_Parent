@@ -22,6 +22,7 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
 
     @Inject
     FirebaseAuth auth;
+
     private boolean emailValid;
     private boolean passwordValid;
     private ActivityEmailAuthBinding binding;
@@ -59,8 +60,6 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
             }
         });
     }
-
-//    в onPause сохранить activity?
 
     public void showToastWithEmail(String toastMessage) {
         Toast.makeText(getApplicationContext(), toastMessage,

@@ -25,16 +25,13 @@ public class MainActivity extends BaseActivity implements MainView {
         setContentView(view);
         MyApplication.appComponent.inject(this);
 
-        if ( savedInstanceState == null ){
-        mainPresenter.checkIfUserLoggedIn();
+        if (savedInstanceState == null) {
+            mainPresenter.checkIfUserLoggedIn();
         }
 
         binding.btnEmail.setOnClickListener(v -> goToAnotherActivity(EmailAuthActivity.class));
         binding.btnPhone.setOnClickListener(v -> goToAnotherActivity(PhoneAuthActivity.class));
     }
-
-
-
 
     @Override
     public void goToAnotherActivity(Class activity) {

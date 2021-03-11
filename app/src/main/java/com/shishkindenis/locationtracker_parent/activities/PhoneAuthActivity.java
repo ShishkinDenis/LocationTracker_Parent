@@ -22,12 +22,11 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
     @InjectPresenter
     PhoneAuthPresenter phoneAuthPresenter;
-
     @Inject
     FirebaseAuth auth;
+
     private boolean phoneNumberValid;
     private boolean codeValid;
-
     private ActivityPhoneAuthBinding binding;
 
     @Override
@@ -43,8 +42,7 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
             binding.pbPhoneAuth.setVisibility(View.VISIBLE);
             if (validatePhoneNumber()) {
                 startPhoneNumberVerification(binding.etPhoneNumber.getText().toString());
-            }
-            else{
+            } else {
                 setErrorIfInvalid();
             }
             binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
@@ -54,8 +52,7 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
             if (validateCode()) {
                 phoneAuthPresenter.verifyPhoneNumberWithCode(
                         auth, binding.etVerificationCode.getText().toString());
-            }
-            else{
+            } else {
                 setErrorIfInvalid();
             }
             binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
@@ -112,10 +109,10 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
     public void setErrorIfInvalid() {
         if (!phoneNumberValid) {
-         showInvalidPhoneNumberError();
+            showInvalidPhoneNumberError();
         }
         if (!codeValid) {
-           showInvalidCodeError();
+            showInvalidCodeError();
         }
     }
 }

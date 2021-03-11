@@ -23,7 +23,6 @@ public class BaseActivity extends MvpAppCompatActivity {
 
     public void goToAnotherActivity(Class activity) {
         Intent intent = new Intent(this, activity);
-//        activityForResult?
         startActivity(intent);
     }
 }
