@@ -17,10 +17,10 @@ public class CalendarPresenter extends MvpPresenter<CalendarView> {
     FirebaseAuth auth;
 
     public CalendarPresenter() {
+        MyApplication.appComponent.inject(this);
     }
 
     public void signOut() {
-        MyApplication.appComponent.inject(this);
         auth.signOut();
         getViewState().showToast(R.string.sign_out_successful);
     }

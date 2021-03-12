@@ -1,5 +1,6 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
@@ -25,8 +26,6 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
     @Inject
     FirebaseAuth auth;
 
-    private boolean phoneNumberValid;
-    private boolean codeValid;
     private ActivityPhoneAuthBinding binding;
 
     @Override
@@ -60,14 +59,10 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
         phoneAuthPresenter.phoneVerificationCallback(auth);
     }
 
-    @Override
-    public void showToast(int toastMessage) {
-        super.showToast(toastMessage);
-    }
-
-    @Override
-    public void goToAnotherActivity(Class activity) {
-        super.goToAnotherActivity(activity);
+    public void goToCalendarActivity() {
+        Intent intent = new Intent(this, CalendarActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void startPhoneNumberVerification(String phoneNumber) {
@@ -83,13 +78,11 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
 
     public boolean validatePhoneNumber() {
-        phoneNumberValid = !binding.etPhoneNumber.getText().toString().isEmpty();
-        return phoneNumberValid;
+        return !binding.etPhoneNumber.getText().toString().isEmpty();
     }
 
     public boolean validateCode() {
-        codeValid = !binding.etVerificationCode.getText().toString().isEmpty();
-        return codeValid;
+        return !binding.etVerificationCode.getText().toString().isEmpty();
     }
 
     @Override
@@ -108,10 +101,10 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
     }
 
     public void setErrorIfInvalid() {
-        if (!phoneNumberValid) {
+        if (!validatePhoneNumber()) {
             showInvalidPhoneNumberError();
         }
-        if (!codeValid) {
+        if (!validateCode()) {
             showInvalidCodeError();
         }
     }

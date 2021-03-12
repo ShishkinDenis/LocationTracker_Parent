@@ -29,7 +29,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     private final String datePattern = "yyyy-MM-dd";
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-    private Intent intent;
     private String date;
     private ActivityCalendarBinding binding;
     private Calendar calendar;
@@ -43,7 +42,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         binding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View calendarActivityView = binding.getRoot();
         setContentView(calendarActivityView);
-        intent = new Intent();
         calendar = Calendar.getInstance();
         setSupportActionBar(binding.toolbar);
 
@@ -64,7 +62,7 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
             SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
             date = sdf.format(calendar.getTime());
         });
-        binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToAnotherActivity(MapActivity.class));
+        binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToMapActivity());
     }
 
     @Override
@@ -76,11 +74,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     }
 
     @Override
-    public void showToast(int toastMessage) {
-        super.showToast(toastMessage);
-    }
-
-    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
@@ -89,7 +82,7 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         calendarPresenter.signOut();
-        setResult(RESULT_OK, intent);
+        setResult(RESULT_OK, null);
         finish();
         return super.onOptionsItemSelected(item);
     }
@@ -102,9 +95,8 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
                 .show();
     }
 
-    @Override
-    public void goToAnotherActivity(Class activity) {
-        Intent intent = new Intent(this, activity);
+    public void goToMapActivity() {
+        Intent intent = new Intent(this, MapActivity.class);
         intent.putExtra(DATE_FIELD, date);
         startActivityForResult(intent, 1);
     }

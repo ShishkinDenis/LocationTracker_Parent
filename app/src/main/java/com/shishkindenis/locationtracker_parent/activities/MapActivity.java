@@ -1,7 +1,6 @@
 package com.shishkindenis.locationtracker_parent.activities;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -45,7 +44,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     private FirebaseFirestore firestoreDataBase;
     private PolylineOptions polylineOptions;
     private String date;
-    private Intent intent;
     private ActivityMapBinding binding;
     private GoogleMap map;
     private Double longitude;
@@ -63,7 +61,6 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
         firestoreDataBase = FirebaseFirestore.getInstance();
         polylineOptions = new PolylineOptions();
         date = getIntent().getExtras().getString(DATE_FIELD);
-        intent = new Intent();
         MyApplication.appComponent.inject(this);
         userId = idSingleton.getUserId();
 
@@ -98,7 +95,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
                         } else {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                setResult(RESULT_OK, intent);
+                                setResult(RESULT_OK, null);
                                 getPosition(document);
                                 setTrack(map);
                             }
@@ -126,7 +123,7 @@ public class MapActivity extends FragmentActivity implements OnMapReadyCallback,
     }
 
     public void backToCalendarActivity() {
-        setResult(RESULT_CANCELED, intent);
+        setResult(RESULT_CANCELED, null);
         finish();
     }
 

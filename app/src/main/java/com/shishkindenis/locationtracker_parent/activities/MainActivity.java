@@ -29,19 +29,26 @@ public class MainActivity extends BaseActivity implements MainView {
             mainPresenter.checkIfUserLoggedIn();
         }
 
-        binding.btnEmail.setOnClickListener(v -> goToAnotherActivity(EmailAuthActivity.class));
-        binding.btnPhone.setOnClickListener(v -> goToAnotherActivity(PhoneAuthActivity.class));
+        binding.btnEmail.setOnClickListener(v -> goToEmailAuthActivity());
+        binding.btnPhone.setOnClickListener(v -> goToPhoneAuthActivity());
     }
 
     @Override
-    public void goToAnotherActivity(Class activity) {
-        super.goToAnotherActivity(activity);
-    }
-
-    @Override
-    public void goToAnotherActivityForResult(Class activity) {
-        Intent intent = new Intent(this, activity);
+    public void goToCalendarActivityForResult() {
+        Intent intent = new Intent(this, CalendarActivity.class);
         startActivityForResult(intent, 2);
+        finish();
     }
 
+    public void goToEmailAuthActivity() {
+        Intent intent = new Intent(this, EmailAuthActivity.class);
+        startActivity(intent);
+        finish();
+    }
+
+    public void goToPhoneAuthActivity() {
+        Intent intent = new Intent(this, PhoneAuthActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }

@@ -2,7 +2,6 @@ package com.shishkindenis.locationtracker_parent.presenters;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.shishkindenis.locationtracker_parent.activities.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
 import com.shishkindenis.locationtracker_parent.views.MainView;
@@ -24,19 +23,15 @@ public class MainPresenter extends MvpPresenter<MainView> {
     private FirebaseUser user;
 
     public MainPresenter() {
+        MyApplication.appComponent.inject(this);
     }
 
     public void checkIfUserLoggedIn() {
-        MyApplication.appComponent.inject(this);
-
         user = auth.getCurrentUser();
         if (user != null) {
             userID = user.getUid();
             idSingleton.setUserId(userID);
-            getViewState().goToAnotherActivityForResult(CalendarActivity.class);
+            getViewState().goToCalendarActivityForResult();
         }
-        //        else what?
     }
-
-
 }
