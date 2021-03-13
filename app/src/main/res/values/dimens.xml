@@ -44,4 +44,16 @@
     <dimen name="text_view_margin_top_large">112dp</dimen>
     <dimen name="image_view_map_width">60dp</dimen>
     <dimen name="image_view_map_height">50dp</dimen>
+    <dimen name="text_view_margin_top_small_landscape">12dp</dimen>
+    <dimen name="button_margin_top_landscape">24dp</dimen>
+    <dimen name="button_width_landscape_orientation">300dp</dimen>
+    <dimen name="button_margin_bottom_landscape">60dp</dimen>
+    <dimen name="calendar_view_margin_start">16dp</dimen>
+    <dimen name="calendar_view_margin_end">16dp</dimen>
+    <dimen name="calendar_view_margin_bottom">200dp</dimen>
+    <dimen name="calendar_view_margin_top">200dp</dimen>
+    <dimen name="calendar_button_margin_bottom">97dp</dimen>
+    <dimen name="calendar_view_margin_bottom_landscape">88dp</dimen>
+    <dimen name="calendar_view_margin_top_landscape">16dp</dimen>
+    <dimen name="calendar_button_margin_bottom_landscape">24dp</dimen>
 </resources>

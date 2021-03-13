@@ -8,19 +8,24 @@
 
     <CalendarView
         android:id="@+id/calendarView"
-        android:layout_width="338dp"
-        android:layout_height="369dp"
-        android:layout_marginBottom="216dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/calendar_view_margin_start"
+        android:layout_marginEnd="@dimen/calendar_view_margin_end"
+        android:layout_marginBottom="@dimen/calendar_view_margin_bottom"
+        android:layout_marginTop="@dimen/calendar_view_margin_top"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.482"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/btnGoToMapFromCalendar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="97dp"
+        android:layout_marginBottom="@dimen/calendar_button_margin_bottom"
         android:text="OK"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/calendarView"

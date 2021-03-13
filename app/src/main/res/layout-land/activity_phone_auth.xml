@@ -37,12 +37,10 @@
 
     <Button
         android:id="@+id/btnVerifyCode"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/button_width_landscape_orientation"
         android:layout_height="wrap_content"
-        android:layout_gravity="start"
         android:layout_marginEnd="@dimen/button_margin_end"
-        android:layout_marginBottom="@dimen/button_margin_bottom_large"
-        android:layout_marginStart="@dimen/button_margin_end_ultra_large"
+        android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
         android:enabled="false"
         android:text="@string/verify_code"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -50,11 +48,10 @@
 
     <Button
         android:id="@+id/btnRequestCode"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_width="@dimen/button_width_landscape_orientation"
         android:layout_marginStart="@dimen/button_margin_start"
-        android:layout_marginEnd="@dimen/button_margin_end_ultra_large"
-        android:layout_marginBottom="@dimen/button_margin_bottom_large"
+        android:layout_marginBottom="@dimen/button_margin_bottom_landscape"
         android:text="@string/request_code"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
