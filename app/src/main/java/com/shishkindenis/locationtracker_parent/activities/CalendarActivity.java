@@ -11,12 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.shishkindenis.locationtracker_parent.R;
+import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityCalendarBinding;
 import com.shishkindenis.locationtracker_parent.presenters.CalendarPresenter;
+import com.shishkindenis.locationtracker_parent.singletons.DateSingleton;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
 
@@ -29,7 +33,11 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     private final String datePattern = "yyyy-MM-dd";
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-    private String date;
+    String date;
+
+    @Inject
+    DateSingleton dateSingleton;
+
     private ActivityCalendarBinding binding;
     private Calendar calendar;
     private int calendarYear;
@@ -44,6 +52,7 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         setContentView(calendarActivityView);
         calendar = Calendar.getInstance();
         setSupportActionBar(binding.toolbar);
+        MyApplication.appComponent.inject(this);
 
         if (savedInstanceState == null) {
             showAlertDialog();
@@ -61,6 +70,9 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
 
             SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
             date = sdf.format(calendar.getTime());
+
+            dateSingleton.setDate(date);
+
         });
         binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToMapActivity());
     }
@@ -97,8 +109,8 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
 
     public void goToMapActivity() {
         Intent intent = new Intent(this, MapActivity.class);
-        intent.putExtra(DATE_FIELD, date);
-        startActivityForResult(intent, 1);
+//        intent.putExtra(DATE_FIELD, date);
+        startActivityForResult(intent, 5);
     }
 
     @Override

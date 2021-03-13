@@ -1,5 +1,6 @@
 package com.shishkindenis.locationtracker_parent.daggerUtils;
 
+import com.shishkindenis.locationtracker_parent.activities.CalendarActivity;
 import com.shishkindenis.locationtracker_parent.activities.EmailAuthActivity;
 import com.shishkindenis.locationtracker_parent.activities.MainActivity;
 import com.shishkindenis.locationtracker_parent.activities.MapActivity;
@@ -7,6 +8,7 @@ import com.shishkindenis.locationtracker_parent.activities.PhoneAuthActivity;
 import com.shishkindenis.locationtracker_parent.presenters.CalendarPresenter;
 import com.shishkindenis.locationtracker_parent.presenters.EmailAuthPresenter;
 import com.shishkindenis.locationtracker_parent.presenters.MainPresenter;
+import com.shishkindenis.locationtracker_parent.presenters.MapPresenter;
 import com.shishkindenis.locationtracker_parent.presenters.PhoneAuthPresenter;
 
 import javax.inject.Singleton;
@@ -14,7 +16,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 
 @Singleton
-@Component(modules = {FirebaseAuthModule.class, IdSingletonModule.class})
+@Component(modules = {FirebaseAuthModule.class, IdSingletonModule.class, DateSingletonModule.class})
 public interface ApplicationComponent {
     void inject(EmailAuthActivity emailAuthActivity);
 
@@ -24,6 +26,8 @@ public interface ApplicationComponent {
 
     void inject(MapActivity mapActivity);
 
+    void inject(CalendarActivity calendarActivity);
+
     void inject(MainPresenter mainPresenter);
 
     void inject(EmailAuthPresenter emailAuthPresenter);
@@ -31,4 +35,6 @@ public interface ApplicationComponent {
     void inject(PhoneAuthPresenter phoneAuthPresenter);
 
     void inject(CalendarPresenter calendarPresenter);
+
+    void inject(MapPresenter mapPresenter);
 }

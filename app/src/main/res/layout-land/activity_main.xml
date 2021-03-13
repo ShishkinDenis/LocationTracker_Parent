@@ -114,7 +114,7 @@
         android:gravity="center|center_horizontal"
         android:text="@string/parent_edition"
         android:textColor="#03A9F4"
-        android:textSize="@dimen/parent_edition_text_size"
+        android:textSize="18dp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/tvLocationTracker"
         app:layout_constraintHorizontal_bias="0.377"
