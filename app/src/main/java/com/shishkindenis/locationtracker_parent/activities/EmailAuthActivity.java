@@ -28,8 +28,8 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
 
     public void goToCalendarActivity() {
         Intent intent = new Intent(this, CalendarActivity.class);
-        startActivity(intent);
         finish();
+        startActivity(intent);
     }
 
     @Override

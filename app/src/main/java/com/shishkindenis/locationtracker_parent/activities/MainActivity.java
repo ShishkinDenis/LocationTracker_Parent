@@ -36,19 +36,20 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void goToCalendarActivityForResult() {
         Intent intent = new Intent(this, CalendarActivity.class);
-        startActivityForResult(intent, 2);
         finish();
+        startActivityForResult(intent, 2);
     }
 
     public void goToEmailAuthActivity() {
         Intent intent = new Intent(this, EmailAuthActivity.class);
-        startActivity(intent);
         finish();
+        startActivity(intent);
+
     }
 
     public void goToPhoneAuthActivity() {
         Intent intent = new Intent(this, PhoneAuthActivity.class);
-        startActivity(intent);
         finish();
+        startActivity(intent);
     }
 }

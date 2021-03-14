@@ -61,8 +61,8 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
     public void goToCalendarActivity() {
         Intent intent = new Intent(this, CalendarActivity.class);
-        startActivity(intent);
         finish();
+        startActivity(intent);
     }
 
     private void startPhoneNumberVerification(String phoneNumber) {

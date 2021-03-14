@@ -17,13 +17,12 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class MapPresenter extends MvpPresenter<MapView> {
 
+    private static final String DATE_FIELD = "Date";
+    private static final String TAG = "Location";
     @Inject
     IdSingleton idSingleton;
     @Inject
     DateSingleton dateSingleton;
-
-    private static final String DATE_FIELD = "Date";
-    private static final String TAG = "Location";
     private FirebaseFirestore firestoreDataBase;
     private String date;
     private String userId;

@@ -70,9 +70,7 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
 
             SimpleDateFormat sdf = new SimpleDateFormat(datePattern);
             date = sdf.format(calendar.getTime());
-
             dateSingleton.setDate(date);
-
         });
         binding.btnGoToMapFromCalendar.setOnClickListener(v -> goToMapActivity());
     }
@@ -109,7 +107,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
 
     public void goToMapActivity() {
         Intent intent = new Intent(this, MapActivity.class);
-//        intent.putExtra(DATE_FIELD, date);
         startActivityForResult(intent, 5);
     }
 

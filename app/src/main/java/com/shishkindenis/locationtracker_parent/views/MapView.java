@@ -9,7 +9,10 @@ import moxy.viewstate.strategy.StateStrategyType;
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MapView extends MvpView {
     void backToCalendarActivityWithCancelledResult();
+
     void setTrack();
+
     void getPosition(QueryDocumentSnapshot document);
+
     void backToCalendarActivityWithOkResult();
 }
