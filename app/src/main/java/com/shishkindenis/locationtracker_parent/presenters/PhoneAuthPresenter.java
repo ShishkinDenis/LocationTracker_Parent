@@ -11,7 +11,7 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
-import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
+import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.PhoneAuthView;
 
 import javax.inject.Inject;
@@ -22,8 +22,8 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
-    @Inject
-    IdSingleton idSingleton;
+@Inject
+FirebaseUserSingleton firebaseUserSingleton;
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
     private String phoneVerificationId;
@@ -67,7 +67,7 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = task.getResult().getUser();
                         userId = user.getUid();
-                        idSingleton.setUserId(userId);
+                        firebaseUserSingleton.setUserId(userId);
                         getViewState().showToast(R.string.authentication_successful);
                         getViewState().goToCalendarActivity();
                     } else {

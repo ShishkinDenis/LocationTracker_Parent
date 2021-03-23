@@ -4,7 +4,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
-import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
+import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
 
 import javax.inject.Inject;
@@ -16,7 +16,7 @@ import moxy.MvpPresenter;
 public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
 
     @Inject
-    IdSingleton idSingleton;
+    FirebaseUserSingleton firebaseUserSingleton;
 
     private String userId;
 
@@ -39,9 +39,9 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = auth.getCurrentUser();
+                        FirebaseUser user = firebaseUserSingleton.getFirebaseAuth().getCurrentUser();
                         userId = user.getUid();
-                        idSingleton.setUserId(userId);
+                        firebaseUserSingleton.setUserId(userId);
                         getViewState().showToast(R.string.authentication_successful);
                         getViewState().goToCalendarActivity();
                     } else {

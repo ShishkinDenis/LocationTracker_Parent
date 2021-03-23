@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMainBinding;
 import com.shishkindenis.locationtracker_parent.presenters.MainPresenter;
 import com.shishkindenis.locationtracker_parent.views.MainView;
@@ -23,7 +22,6 @@ public class MainActivity extends BaseActivity implements MainView {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
-        MyApplication.appComponent.inject(this);
 
         if (savedInstanceState == null) {
             mainPresenter.checkIfUserLoggedIn();

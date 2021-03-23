@@ -6,7 +6,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.singletons.DateSingleton;
-import com.shishkindenis.locationtracker_parent.singletons.IdSingleton;
+import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.MapView;
 
 import javax.inject.Inject;
@@ -20,7 +20,8 @@ public class MapPresenter extends MvpPresenter<MapView> {
     private static final String DATE_FIELD = "Date";
     private static final String TAG = "Location";
     @Inject
-    IdSingleton idSingleton;
+    FirebaseUserSingleton firebaseUserSingleton;
+
     @Inject
     DateSingleton dateSingleton;
     private FirebaseFirestore firestoreDataBase;
@@ -33,7 +34,7 @@ public class MapPresenter extends MvpPresenter<MapView> {
 
     public void readLocation() {
         firestoreDataBase = FirebaseFirestore.getInstance();
-        userId = idSingleton.getUserId();
+        userId = firebaseUserSingleton.getUserId();
         date = dateSingleton.getDate();
 
         firestoreDataBase.collection(userId)

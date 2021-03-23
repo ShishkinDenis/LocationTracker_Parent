@@ -4,13 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityPhoneAuthBinding;
 import com.shishkindenis.locationtracker_parent.presenters.PhoneAuthPresenter;
+import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.PhoneAuthView;
 
 import java.util.concurrent.TimeUnit;
@@ -24,7 +24,7 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
     @InjectPresenter
     PhoneAuthPresenter phoneAuthPresenter;
     @Inject
-    FirebaseAuth auth;
+    FirebaseUserSingleton firebaseUserSingleton;
 
     private ActivityPhoneAuthBinding binding;
 
@@ -39,7 +39,7 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
         binding.btnRequestCode.setOnClickListener(v -> {
             binding.pbPhoneAuth.setVisibility(View.VISIBLE);
-            if (validatePhoneNumber()) {
+            if (phoneNumberIsValid()) {
                 startPhoneNumberVerification(binding.etPhoneNumber.getText().toString());
             } else {
                 setErrorIfInvalid();
@@ -48,15 +48,17 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
         });
         binding.btnVerifyCode.setOnClickListener(v -> {
             binding.pbPhoneAuth.setVisibility(View.VISIBLE);
-            if (validateCode()) {
+            if (codeIsValid()) {
                 phoneAuthPresenter.verifyPhoneNumberWithCode(
-                        auth, binding.etVerificationCode.getText().toString());
+//                        auth, binding.etVerificationCode.getText().toString());
+                firebaseUserSingleton.getFirebaseAuth(), binding.etVerificationCode.getText().toString());
             } else {
                 setErrorIfInvalid();
             }
             binding.pbPhoneAuth.setVisibility(View.INVISIBLE);
         });
-        phoneAuthPresenter.phoneVerificationCallback(auth);
+//        phoneAuthPresenter.phoneVerificationCallback(auth);
+        phoneAuthPresenter.phoneVerificationCallback(firebaseUserSingleton.getFirebaseAuth());
     }
 
     public void goToCalendarActivity() {
@@ -67,21 +69,23 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
     private void startPhoneNumberVerification(String phoneNumber) {
         PhoneAuthOptions options =
-                PhoneAuthOptions.newBuilder(auth)
+//                PhoneAuthOptions.newBuilder(auth)
+        PhoneAuthOptions.newBuilder(firebaseUserSingleton.getFirebaseAuth())
                         .setPhoneNumber(phoneNumber)
                         .setTimeout(60L, TimeUnit.SECONDS)
                         .setActivity(this)
-                        .setCallbacks(phoneAuthPresenter.phoneVerificationCallback(auth))
+//                        .setCallbacks(phoneAuthPresenter.phoneVerificationCallback(auth))
+                .setCallbacks(phoneAuthPresenter.phoneVerificationCallback(firebaseUserSingleton.getFirebaseAuth()))
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
     }
 
 
-    public boolean validatePhoneNumber() {
+    public boolean phoneNumberIsValid() {
         return !binding.etPhoneNumber.getText().toString().isEmpty();
     }
 
-    public boolean validateCode() {
+    public boolean codeIsValid() {
         return !binding.etVerificationCode.getText().toString().isEmpty();
     }
 
@@ -101,10 +105,10 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
     }
 
     public void setErrorIfInvalid() {
-        if (!validatePhoneNumber()) {
+        if (!phoneNumberIsValid()) {
             showInvalidPhoneNumberError();
         }
-        if (!validateCode()) {
+        if (!codeIsValid()) {
             showInvalidCodeError();
         }
     }

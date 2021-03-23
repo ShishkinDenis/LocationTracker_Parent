@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
 import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityEmailAuthBinding;
 import com.shishkindenis.locationtracker_parent.presenters.EmailAuthPresenter;
+import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
 
 import javax.inject.Inject;
@@ -21,9 +21,8 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
     @InjectPresenter
     EmailAuthPresenter emailAuthPresenter;
 
-    @Inject
-    FirebaseAuth auth;
-
+@Inject
+FirebaseUserSingleton firebaseUserSingleton;
     private ActivityEmailAuthBinding binding;
 
     public void goToCalendarActivity() {
@@ -41,14 +40,14 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
         setContentView(view);
 
         binding.btnRegister.setOnClickListener(v -> {
-            if (validateEmail() & validatePassword()) {
+            if (emailIsValid() & passwordIsValid()) {
                 registerIfValid();
             } else {
                 setErrorIfInvalid();
             }
         });
         binding.btnLogin.setOnClickListener(v -> {
-            if (validateEmail() & validatePassword()) {
+            if (emailIsValid() & passwordIsValid()) {
                 logInIfValid();
             } else {
                 setErrorIfInvalid();
@@ -61,33 +60,35 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
                 Toast.LENGTH_LONG).show();
     }
 
-    public boolean validateEmail() {
+    public boolean emailIsValid() {
         return !binding.etEmail.getText().toString().isEmpty();
     }
 
-    public boolean validatePassword() {
+    public boolean passwordIsValid() {
         return !binding.etPassword.getText().toString().isEmpty();
     }
 
     public void setErrorIfInvalid() {
-        if (!validateEmail()) {
+        if (!emailIsValid()) {
             binding.etEmail.setError(getString(R.string.required_email));
         }
-        if (!validatePassword()) {
+        if (!passwordIsValid()) {
             binding.etPassword.setError(getString(R.string.required_password));
         }
     }
 
     public void logInIfValid() {
         binding.pbEmailAuth.setVisibility(View.VISIBLE);
-        emailAuthPresenter.signIn(auth, binding.etEmail.getText().toString(),
+//        emailAuthPresenter.signIn(auth, binding.etEmail.getText().toString(),
+                emailAuthPresenter.signIn(firebaseUserSingleton.getFirebaseAuth(), binding.etEmail.getText().toString(),
                 binding.etPassword.getText().toString());
         binding.pbEmailAuth.setVisibility(View.INVISIBLE);
     }
 
     public void registerIfValid() {
         binding.pbEmailAuth.setVisibility(View.VISIBLE);
-        emailAuthPresenter.createAccount(auth, binding.etEmail.getText().toString(),
+//        emailAuthPresenter.createAccount(auth, binding.etEmail.getText().toString(),
+                emailAuthPresenter.createAccount(firebaseUserSingleton.getFirebaseAuth(), binding.etEmail.getText().toString(),
                 binding.etPassword.getText().toString());
         binding.pbEmailAuth.setVisibility(View.INVISIBLE);
     }
