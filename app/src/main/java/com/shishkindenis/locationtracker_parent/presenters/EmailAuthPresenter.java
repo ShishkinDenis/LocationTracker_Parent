@@ -3,7 +3,6 @@ package com.shishkindenis.locationtracker_parent.presenters;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.shishkindenis.locationtracker_parent.R;
-import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
 
@@ -15,13 +14,21 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
 
-    @Inject
+//    @Inject
+//    FirebaseUserSingleton firebaseUserSingleton;
+//
     FirebaseUserSingleton firebaseUserSingleton;
 
     private String userId;
 
-    public EmailAuthPresenter() {
-        MyApplication.appComponent.inject(this);
+//    public EmailAuthPresenter() {
+//        MyApplication.appComponent.inject(this);
+//             Log.d("EmailAuthPresenter", "This is FirebaseUserSingleton injected");
+//    }
+    @Inject
+    public EmailAuthPresenter(FirebaseUserSingleton firebaseUserSingleton) {
+     this.firebaseUserSingleton = firebaseUserSingleton;
+//     Log.d("EmailAuthPresenter", "This is FirebaseUserSingleton injected");
     }
 
     public void createAccount(FirebaseAuth auth, String email, String password) {
@@ -39,7 +46,8 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        FirebaseUser user = firebaseUserSingleton.getFirebaseAuth().getCurrentUser();
+//                        FirebaseUser user = firebaseUserSingleton.getFirebaseAuth().getCurrentUser();
+                        FirebaseUser user = auth.getCurrentUser();
                         userId = user.getUid();
                         firebaseUserSingleton.setUserId(userId);
                         getViewState().showToast(R.string.authentication_successful);

@@ -23,6 +23,7 @@ import java.util.Calendar;
 import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 public class CalendarActivity extends BaseActivity implements CalendarView {
 
@@ -31,10 +32,21 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     private static final String MONTH = "Month";
     private static final String DAY = "Day";
     private final String datePattern = "yyyy-MM-dd";
+//    @InjectPresenter
+//    CalendarPresenter calendarPresenter;
+
+    @Inject
     @InjectPresenter
     CalendarPresenter calendarPresenter;
+
+    @ProvidePresenter
+    CalendarPresenter providePresenter(){
+        return calendarPresenter;
+    }
+
     String date;
 
+//    убрать инжект?
     @Inject
     DateSingleton dateSingleton;
 
@@ -46,13 +58,14 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApplication.appComponent.inject(this);
         super.onCreate(savedInstanceState);
         binding = ActivityCalendarBinding.inflate(getLayoutInflater());
         View calendarActivityView = binding.getRoot();
         setContentView(calendarActivityView);
         calendar = Calendar.getInstance();
         setSupportActionBar(binding.toolbar);
-        MyApplication.appComponent.inject(this);
+
 
         if (savedInstanceState == null) {
             showAlertDialog();

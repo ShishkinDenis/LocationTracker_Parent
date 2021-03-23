@@ -17,20 +17,32 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.shishkindenis.locationtracker_parent.R;
+import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMapBinding;
 import com.shishkindenis.locationtracker_parent.presenters.MapPresenter;
 import com.shishkindenis.locationtracker_parent.views.MapView;
 
+import javax.inject.Inject;
+
 import moxy.MvpAppCompatActivity;
 import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 public class MapActivity extends MvpAppCompatActivity implements OnMapReadyCallback, MapView {
 
     private static final String LONGITUDE_FIELD = "Longitude";
     private static final String LATITUDE_FIELD = "Latitude";
     private static final String TIME_FIELD = "Time";
+//    @InjectPresenter
+//    MapPresenter mapPresenter;
+
+    @Inject
     @InjectPresenter
     MapPresenter mapPresenter;
+
+    @ProvidePresenter
+    MapPresenter provideMapPresenter(){return mapPresenter;}
+
     private PolylineOptions polylineOptions;
     private ActivityMapBinding binding;
     private GoogleMap map;
@@ -40,6 +52,7 @@ public class MapActivity extends MvpAppCompatActivity implements OnMapReadyCallb
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApplication.appComponent.inject(this);
         super.onCreate(savedInstanceState);
         binding = ActivityMapBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

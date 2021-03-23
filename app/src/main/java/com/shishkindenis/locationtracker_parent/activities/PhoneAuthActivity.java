@@ -18,11 +18,19 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
+//    @InjectPresenter
+//    PhoneAuthPresenter phoneAuthPresenter;
+    @Inject
     @InjectPresenter
     PhoneAuthPresenter phoneAuthPresenter;
+
+    @ProvidePresenter
+    PhoneAuthPresenter providePhoneAuthPresenter(){return phoneAuthPresenter;}
+
     @Inject
     FirebaseUserSingleton firebaseUserSingleton;
 
@@ -30,12 +38,13 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApplication.appComponent.inject(this);
         super.onCreate(savedInstanceState);
         binding = ActivityPhoneAuthBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
         setContentView(view);
 
-        MyApplication.appComponent.inject(this);
+
 
         binding.btnRequestCode.setOnClickListener(v -> {
             binding.pbPhoneAuth.setVisibility(View.VISIBLE);
@@ -51,6 +60,7 @@ public class PhoneAuthActivity extends BaseActivity implements PhoneAuthView {
             if (codeIsValid()) {
                 phoneAuthPresenter.verifyPhoneNumberWithCode(
 //                        auth, binding.etVerificationCode.getText().toString());
+//                        вынести в переменную
                 firebaseUserSingleton.getFirebaseAuth(), binding.etVerificationCode.getText().toString());
             } else {
                 setErrorIfInvalid();

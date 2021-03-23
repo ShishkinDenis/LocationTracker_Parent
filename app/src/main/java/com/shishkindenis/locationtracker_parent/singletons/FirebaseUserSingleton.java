@@ -2,7 +2,13 @@ package com.shishkindenis.locationtracker_parent.singletons;
 
 import com.google.firebase.auth.FirebaseAuth;
 
+import javax.inject.Inject;
+
 public class FirebaseUserSingleton {
+    @Inject
+    public FirebaseUserSingleton(){
+
+    }
     private String userId;
 
     public String getUserId() {

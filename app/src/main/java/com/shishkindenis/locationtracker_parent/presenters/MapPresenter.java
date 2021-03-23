@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.singletons.DateSingleton;
 import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.MapView;
@@ -19,17 +18,26 @@ public class MapPresenter extends MvpPresenter<MapView> {
 
     private static final String DATE_FIELD = "Date";
     private static final String TAG = "Location";
-    @Inject
-    FirebaseUserSingleton firebaseUserSingleton;
-
-    @Inject
+//    @Inject
+//    FirebaseUserSingleton firebaseUserSingleton;
+//    @Inject
+//    DateSingleton dateSingleton;
+FirebaseUserSingleton firebaseUserSingleton;
     DateSingleton dateSingleton;
+
+
     private FirebaseFirestore firestoreDataBase;
     private String date;
     private String userId;
 
-    public MapPresenter() {
-        MyApplication.appComponent.inject(this);
+//    public MapPresenter() {
+//        MyApplication.appComponent.inject(this);
+//    }
+
+    @Inject
+    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton) {
+      this.firebaseUserSingleton = firebaseUserSingleton;
+      this.dateSingleton = dateSingleton;
     }
 
     public void readLocation() {

@@ -15,14 +15,25 @@ import com.shishkindenis.locationtracker_parent.views.EmailAuthView;
 import javax.inject.Inject;
 
 import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
 
-    @InjectPresenter
-    EmailAuthPresenter emailAuthPresenter;
+//    @InjectPresenter
+//    EmailAuthPresenter emailAuthPresenter;
+//
+        @Inject
+        @InjectPresenter
+        EmailAuthPresenter emailAuthPresenter;
+
+        @ProvidePresenter
+        EmailAuthPresenter provideEmailAuthPresenter(){return emailAuthPresenter;}
 
 @Inject
 FirebaseUserSingleton firebaseUserSingleton;
+//    FirebaseAuth auth;
+
+
     private ActivityEmailAuthBinding binding;
 
     public void goToCalendarActivity() {
@@ -33,11 +44,13 @@ FirebaseUserSingleton firebaseUserSingleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApplication.appComponent.inject(this);
         super.onCreate(savedInstanceState);
         binding = ActivityEmailAuthBinding.inflate(getLayoutInflater());
-        MyApplication.appComponent.inject(this);
         View view = binding.getRoot();
         setContentView(view);
+
+//        auth = firebaseUserSingleton.getFirebaseAuth();
 
         binding.btnRegister.setOnClickListener(v -> {
             if (emailIsValid() & passwordIsValid()) {
@@ -81,6 +94,7 @@ FirebaseUserSingleton firebaseUserSingleton;
         binding.pbEmailAuth.setVisibility(View.VISIBLE);
 //        emailAuthPresenter.signIn(auth, binding.etEmail.getText().toString(),
                 emailAuthPresenter.signIn(firebaseUserSingleton.getFirebaseAuth(), binding.etEmail.getText().toString(),
+//                emailAuthPresenter.signIn(auth, binding.etEmail.getText().toString(),
                 binding.etPassword.getText().toString());
         binding.pbEmailAuth.setVisibility(View.INVISIBLE);
     }
@@ -89,6 +103,7 @@ FirebaseUserSingleton firebaseUserSingleton;
         binding.pbEmailAuth.setVisibility(View.VISIBLE);
 //        emailAuthPresenter.createAccount(auth, binding.etEmail.getText().toString(),
                 emailAuthPresenter.createAccount(firebaseUserSingleton.getFirebaseAuth(), binding.etEmail.getText().toString(),
+//                emailAuthPresenter.createAccount(auth, binding.etEmail.getText().toString(),
                 binding.etPassword.getText().toString());
         binding.pbEmailAuth.setVisibility(View.INVISIBLE);
     }

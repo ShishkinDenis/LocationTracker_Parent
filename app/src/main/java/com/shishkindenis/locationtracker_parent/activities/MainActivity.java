@@ -4,20 +4,33 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.databinding.ActivityMainBinding;
 import com.shishkindenis.locationtracker_parent.presenters.MainPresenter;
 import com.shishkindenis.locationtracker_parent.views.MainView;
 
+import javax.inject.Inject;
+
 import moxy.presenter.InjectPresenter;
+import moxy.presenter.ProvidePresenter;
 
 public class MainActivity extends BaseActivity implements MainView {
 
+//    @InjectPresenter
+//    MainPresenter mainPresenter;
+
+    @Inject
     @InjectPresenter
     MainPresenter mainPresenter;
+
+    @ProvidePresenter
+    MainPresenter provideMainPresenter(){return mainPresenter;}
+
     private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        MyApplication.appComponent.inject(this);
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();

@@ -1,7 +1,6 @@
 package com.shishkindenis.locationtracker_parent.presenters;
 
 import com.shishkindenis.locationtracker_parent.R;
-import com.shishkindenis.locationtracker_parent.daggerUtils.MyApplication;
 import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.CalendarView;
 
@@ -13,12 +12,22 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class CalendarPresenter extends MvpPresenter<CalendarView> {
 
-    @Inject
+//    @Inject
+//    FirebaseUserSingleton firebaseUserSingleton;
+//
+//    public CalendarPresenter() {
+//        MyApplication.appComponent.inject(this);
+//    }
+
+
     FirebaseUserSingleton firebaseUserSingleton;
 
-    public CalendarPresenter() {
-        MyApplication.appComponent.inject(this);
+    @Inject
+    public CalendarPresenter(FirebaseUserSingleton firebaseUserSingleton) {
+      this.firebaseUserSingleton = firebaseUserSingleton;
     }
+
+
 
     public void signOut() {
         firebaseUserSingleton.getFirebaseAuth().signOut();
