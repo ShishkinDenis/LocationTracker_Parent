@@ -11,23 +11,12 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class CalendarPresenter extends MvpPresenter<CalendarView> {
-
-//    @Inject
-//    FirebaseUserSingleton firebaseUserSingleton;
-//
-//    public CalendarPresenter() {
-//        MyApplication.appComponent.inject(this);
-//    }
-
-
     FirebaseUserSingleton firebaseUserSingleton;
 
     @Inject
     public CalendarPresenter(FirebaseUserSingleton firebaseUserSingleton) {
-      this.firebaseUserSingleton = firebaseUserSingleton;
+        this.firebaseUserSingleton = firebaseUserSingleton;
     }
-
-
 
     public void signOut() {
         firebaseUserSingleton.getFirebaseAuth().signOut();

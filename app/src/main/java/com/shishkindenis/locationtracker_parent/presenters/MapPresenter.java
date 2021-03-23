@@ -15,29 +15,18 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class MapPresenter extends MvpPresenter<MapView> {
-
     private static final String DATE_FIELD = "Date";
     private static final String TAG = "Location";
-//    @Inject
-//    FirebaseUserSingleton firebaseUserSingleton;
-//    @Inject
-//    DateSingleton dateSingleton;
-FirebaseUserSingleton firebaseUserSingleton;
+    FirebaseUserSingleton firebaseUserSingleton;
     DateSingleton dateSingleton;
-
-
     private FirebaseFirestore firestoreDataBase;
     private String date;
     private String userId;
 
-//    public MapPresenter() {
-//        MyApplication.appComponent.inject(this);
-//    }
-
     @Inject
     public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton) {
-      this.firebaseUserSingleton = firebaseUserSingleton;
-      this.dateSingleton = dateSingleton;
+        this.firebaseUserSingleton = firebaseUserSingleton;
+        this.dateSingleton = dateSingleton;
     }
 
     public void readLocation() {

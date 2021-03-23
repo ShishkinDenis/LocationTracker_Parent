@@ -11,22 +11,14 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class MainPresenter extends MvpPresenter<MainView> {
-
-//    @Inject
-//    FirebaseUserSingleton firebaseUserSingleton;
     FirebaseUserSingleton firebaseUserSingleton;
-
     private String userID;
     private FirebaseUser user;
 
-//    public MainPresenter() {
-//        MyApplication.appComponent.inject(this);
-//    }
     @Inject
     public MainPresenter(FirebaseUserSingleton firebaseUserSingleton) {
         this.firebaseUserSingleton = firebaseUserSingleton;
     }
-
 
     public void checkIfUserLoggedIn() {
         user = firebaseUserSingleton.getFirebaseAuth().getCurrentUser();

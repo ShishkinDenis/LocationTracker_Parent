@@ -5,11 +5,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import javax.inject.Inject;
 
 public class FirebaseUserSingleton {
-    @Inject
-    public FirebaseUserSingleton(){
-
-    }
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private String userId;
+
+    @Inject
+    public FirebaseUserSingleton() { }
 
     public String getUserId() {
         return userId;
@@ -19,9 +19,7 @@ public class FirebaseUserSingleton {
         this.userId = userId;
     }
 
-    private FirebaseAuth auth = FirebaseAuth.getInstance();
-
-    public FirebaseAuth getFirebaseAuth(){
+    public FirebaseAuth getFirebaseAuth() {
         return auth;
     }
 }

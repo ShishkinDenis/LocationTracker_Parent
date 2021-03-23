@@ -13,22 +13,12 @@ import moxy.MvpPresenter;
 
 @InjectViewState
 public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
-
-//    @Inject
-//    FirebaseUserSingleton firebaseUserSingleton;
-//
     FirebaseUserSingleton firebaseUserSingleton;
-
     private String userId;
 
-//    public EmailAuthPresenter() {
-//        MyApplication.appComponent.inject(this);
-//             Log.d("EmailAuthPresenter", "This is FirebaseUserSingleton injected");
-//    }
     @Inject
     public EmailAuthPresenter(FirebaseUserSingleton firebaseUserSingleton) {
-     this.firebaseUserSingleton = firebaseUserSingleton;
-//     Log.d("EmailAuthPresenter", "This is FirebaseUserSingleton injected");
+        this.firebaseUserSingleton = firebaseUserSingleton;
     }
 
     public void createAccount(FirebaseAuth auth, String email, String password) {
@@ -46,7 +36,6 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
         auth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-//                        FirebaseUser user = firebaseUserSingleton.getFirebaseAuth().getCurrentUser();
                         FirebaseUser user = auth.getCurrentUser();
                         userId = user.getUid();
                         firebaseUserSingleton.setUserId(userId);

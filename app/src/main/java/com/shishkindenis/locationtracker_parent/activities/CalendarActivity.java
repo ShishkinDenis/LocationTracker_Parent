@@ -32,29 +32,22 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
     private static final String MONTH = "Month";
     private static final String DAY = "Day";
     private final String datePattern = "yyyy-MM-dd";
-//    @InjectPresenter
-//    CalendarPresenter calendarPresenter;
-
     @Inject
     @InjectPresenter
     CalendarPresenter calendarPresenter;
-
-    @ProvidePresenter
-    CalendarPresenter providePresenter(){
-        return calendarPresenter;
-    }
-
     String date;
-
-//    убрать инжект?
     @Inject
     DateSingleton dateSingleton;
-
     private ActivityCalendarBinding binding;
     private Calendar calendar;
     private int calendarYear;
     private int calendarMonth;
     private int calendarDay;
+
+    @ProvidePresenter
+    CalendarPresenter providePresenter() {
+        return calendarPresenter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +58,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         setContentView(calendarActivityView);
         calendar = Calendar.getInstance();
         setSupportActionBar(binding.toolbar);
-
 
         if (savedInstanceState == null) {
             showAlertDialog();

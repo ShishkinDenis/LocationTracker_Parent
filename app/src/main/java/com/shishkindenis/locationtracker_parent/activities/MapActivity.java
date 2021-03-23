@@ -33,22 +33,20 @@ public class MapActivity extends MvpAppCompatActivity implements OnMapReadyCallb
     private static final String LONGITUDE_FIELD = "Longitude";
     private static final String LATITUDE_FIELD = "Latitude";
     private static final String TIME_FIELD = "Time";
-//    @InjectPresenter
-//    MapPresenter mapPresenter;
-
     @Inject
     @InjectPresenter
     MapPresenter mapPresenter;
-
-    @ProvidePresenter
-    MapPresenter provideMapPresenter(){return mapPresenter;}
-
     private PolylineOptions polylineOptions;
     private ActivityMapBinding binding;
     private GoogleMap map;
     private Double longitude;
     private Double latitude;
     private String time;
+
+    @ProvidePresenter
+    MapPresenter provideMapPresenter() {
+        return mapPresenter;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

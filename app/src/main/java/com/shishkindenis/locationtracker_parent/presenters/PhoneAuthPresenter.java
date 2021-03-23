@@ -21,19 +21,11 @@ import moxy.MvpPresenter;
 @InjectViewState
 public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
-//@Inject
-//FirebaseUserSingleton firebaseUserSingleton;
-
-FirebaseUserSingleton firebaseUserSingleton;
-
+    FirebaseUserSingleton firebaseUserSingleton;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
     private String phoneVerificationId;
     private PhoneAuthProvider.ForceResendingToken forceResendingToken;
     private String userId;
-
-//    public PhoneAuthPresenter() {
-//        MyApplication.appComponent.inject(this);
-//    }
 
     @Inject
     public PhoneAuthPresenter(FirebaseUserSingleton firebaseUserSingleton) {
