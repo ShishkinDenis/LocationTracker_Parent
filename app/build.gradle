@@ -66,4 +66,8 @@ dependencies {
 
     api 'com.google.dagger:dagger:2.30.1'
     annotationProcessor 'com.google.dagger:dagger-compiler:2.30.1'
+
+    androidTestImplementation 'com.schibsted.spain:barista:3.7.0'
+
+    debugImplementation 'org.mockito:mockito-inline:2.25.0'
 }
