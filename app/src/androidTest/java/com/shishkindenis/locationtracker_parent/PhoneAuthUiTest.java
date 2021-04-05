@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.shishkindenis.locationtracker_parent.activities.MainActivity;
 import com.shishkindenis.locationtracker_parent.activities.PhoneAuthActivity;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -26,13 +27,12 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 @RunWith(AndroidJUnit4.class)
 @LargeTest
 public class PhoneAuthUiTest {
-
+    @Rule
+    public ActivityTestRule<PhoneAuthActivity> phoneAuthActivityActivityTestRule = new ActivityTestRule<>(PhoneAuthActivity.class);
     FirebaseAuth auth = FirebaseAuth.getInstance();
 
     @Test
     public void instanceOfPhoneActivityIsSavedWhenRotating() {
-//сначала выйти в before
-        ActivityTestRule<PhoneAuthActivity> phoneAuthActivityActivityTestRule = new ActivityTestRule<>(PhoneAuthActivity.class);
         PhoneAuthActivity phoneAuthActivity = phoneAuthActivityActivityTestRule.launchActivity(new Intent());
         onView(withId(R.id.etPhoneNumber)).perform(replaceText("+79998887766"));
         phoneAuthActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE);
@@ -40,16 +40,14 @@ public class PhoneAuthUiTest {
     }
 
     @Test
-    public void invalidPhoneNumberErrorIsDisplayed(){
-        ActivityTestRule<PhoneAuthActivity> phoneAuthActivityActivityTestRule = new ActivityTestRule<>(PhoneAuthActivity.class);
+    public void invalidPhoneNumberErrorIsDisplayed() {
         PhoneAuthActivity phoneAuthActivity = phoneAuthActivityActivityTestRule.launchActivity(new Intent());
         onView(withId(R.id.btnRequestCode)).perform(click());
         onView(withId(R.id.etPhoneNumber)).check(matches(hasErrorText("Invalid phone number")));
     }
 
     @Test
-    public void invalidCodeErrorIsDisplayed(){
-        ActivityTestRule<PhoneAuthActivity> phoneAuthActivityActivityTestRule = new ActivityTestRule<>(PhoneAuthActivity.class);
+    public void invalidCodeErrorIsDisplayed() {
         PhoneAuthActivity phoneAuthActivity = phoneAuthActivityActivityTestRule.launchActivity(new Intent());
         onView(withId(R.id.btnRequestCode)).perform(click());
         onView(withId(R.id.etVerificationCode)).check(matches(hasErrorText("Invalid code")));
@@ -57,56 +55,33 @@ public class PhoneAuthUiTest {
 
     @Test
     public void phoneAuthenticationSuccessful() {
-//        включить интернет
         auth.signOut();
         String phoneNumber = "+75558780743";
         String verificationCode = "123007";
         ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
         MainActivity mainActivity = mainActivityTestRule.launchActivity(new Intent());
         onView(withId(R.id.btnPhone)).perform(click());
-
         onView(withId(R.id.etPhoneNumber)).perform(replaceText(phoneNumber));
         onView(withId(R.id.btnRequestCode)).perform(click());
-//        сделать временно активной?
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        TestUtils.sleep();
         onView(withId(R.id.etVerificationCode)).perform(replaceText(verificationCode));
         onView(withId(R.id.btnVerifyCode)).perform(click());
-
-        onView(withText("Authentication successful")).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
+        onView(withText(R.string.authentication_successful)).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
     }
 
     @Test
     public void phoneAuthenticationFailed() {
-//        включить интернет
-//        нужен ли signOut?
         auth.signOut();
         String phoneNumber = "+75558780743";
         String verificationCode = "000000";
         ActivityTestRule<MainActivity> mainActivityTestRule = new ActivityTestRule<>(MainActivity.class);
         MainActivity mainActivity = mainActivityTestRule.launchActivity(new Intent());
         onView(withId(R.id.btnPhone)).perform(click());
-
         onView(withId(R.id.etPhoneNumber)).perform(replaceText(phoneNumber));
         onView(withId(R.id.btnRequestCode)).perform(click());
-//        сделать временно активной?
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        TestUtils.sleep();
         onView(withId(R.id.etVerificationCode)).perform(replaceText(verificationCode));
         onView(withId(R.id.btnVerifyCode)).perform(click());
-
-        onView(withText("Authentication failed")).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
+        onView(withText(R.string.authentication_failed)).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
     }
-
-//    Firebase emulator
-//    Firebase TestLab
-//    Tracking sensitivity - 60 meters (10 for test), period each 10 min (5 second for test).
-//    authentication successful
-//    authentication failed
 }

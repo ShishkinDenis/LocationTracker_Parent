@@ -2,7 +2,6 @@ package com.shishkindenis.locationtracker_parent.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -60,11 +59,6 @@ public class EmailAuthActivity extends BaseActivity implements EmailAuthView {
                 setErrorIfInvalid();
             }
         });
-    }
-
-    //    TODO Delete
-    public void logSomething(){
-        Log.d("1","1");
     }
 
     public void showToastWithEmail(String toastMessage) {

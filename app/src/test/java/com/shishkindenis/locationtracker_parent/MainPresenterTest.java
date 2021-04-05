@@ -22,10 +22,8 @@ public class MainPresenterTest {
     FirebaseUserSingleton firebaseUserSingleton;
     @Mock
     MainView$$State mainView$$State;
-
     @Mock
     FirebaseAuth auth;
-
     @Mock
     FirebaseUser user;
 
@@ -34,15 +32,13 @@ public class MainPresenterTest {
         mainPresenter = new MainPresenter(firebaseUserSingleton);
         mainPresenter.setViewState(mainView$$State);
     }
-    //        работает,если цепочку вызовов раскрутить по одному
 
     @Test
-    public void checkSomething(){
+    public void goToCalendarActivityForResultIsCalled() {
         when(firebaseUserSingleton.getFirebaseAuth()).thenReturn(auth);
         when(auth.getCurrentUser()).thenReturn(user);
-//        when(firebaseUserSingleton.getFirebaseAuth().getCurrentUser()).thenReturn(user);
         mainPresenter.checkIfUserLoggedIn();
         verify(mainView$$State).goToCalendarActivityForResult();
-
     }
+
 }

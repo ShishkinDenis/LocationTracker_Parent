@@ -6,7 +6,8 @@ public class DateSingleton {
     private String date;
 
     @Inject
-    public DateSingleton() { }
+    public DateSingleton() {
+    }
 
     public String getDate() {
         return date;

@@ -27,23 +27,15 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
     }
 
     public void createAccount(FirebaseAuth auth, String email, String password) {
-//        getViewState().logSomething();
         auth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                        удалить
-                        EmailAuthPresenter.this.getViewState().logSomething();
-                        if (task.isSuccessful()) {
-                            EmailAuthPresenter.this.getViewState().showToastWithEmail("User with email: " + email + " was signed up ");
-                        } else {
-                            EmailAuthPresenter.this.getViewState().showToast(R.string.signing_up_failed);
-                        }
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        EmailAuthPresenter.this.getViewState().showToastWithEmail("User with email: " + email + " was signed up ");
+                    } else {
+                        EmailAuthPresenter.this.getViewState().showToast(R.string.signing_up_failed);
                     }
                 });
-
     }
-
 
     public void signIn(FirebaseAuth auth, String email, String password) {
         auth.signInWithEmailAndPassword(email, password)

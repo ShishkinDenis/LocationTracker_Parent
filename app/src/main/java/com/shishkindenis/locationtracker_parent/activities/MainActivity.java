@@ -26,7 +26,6 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         MyApplication.appComponent.inject(this);

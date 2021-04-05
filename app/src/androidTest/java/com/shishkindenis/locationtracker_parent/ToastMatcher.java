@@ -11,6 +11,10 @@ import org.hamcrest.TypeSafeMatcher;
 
 public class ToastMatcher extends TypeSafeMatcher<Root> {
 
+    public static Matcher<Root> isToast() {
+        return new ToastMatcher();
+    }
+
     @Override
     public void describeTo(Description description) {
         description.appendText("is toast");
@@ -25,10 +29,6 @@ public class ToastMatcher extends TypeSafeMatcher<Root> {
             return windowToken == appToken;
         }
         return false;
-    }
-
-    public static Matcher<Root> isToast() {
-        return new ToastMatcher();
     }
 
 }

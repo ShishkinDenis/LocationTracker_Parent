@@ -21,7 +21,6 @@ public class CalendarPresenterTest {
     FirebaseUserSingleton firebaseUserSingleton;
     @Mock
     CalendarView$$State calendarView$$State;
-
     @Mock
     FirebaseAuth auth;
 
@@ -30,13 +29,11 @@ public class CalendarPresenterTest {
         calendarPresenter = new CalendarPresenter(firebaseUserSingleton);
         calendarPresenter.setViewState(calendarView$$State);
     }
-//        работает,если закомментировать firebaseUserSingleton.getFirebaseAuth().signOut();
-//    работает,если в тесте задать поведение для firebaseUserSingleton.getFirebaseAuth()
+
     @Test
-    public void signOutIsCalled(){
+    public void signOutIsCalled() {
         when(firebaseUserSingleton.getFirebaseAuth()).thenReturn(auth);
-       calendarPresenter.signOut();
+        calendarPresenter.signOut();
         verify(calendarView$$State).showToast(R.string.sign_out_successful);
-//       verify(calendarView$$State).logSomething();
     }
 }

@@ -6,7 +6,5 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MainView extends MvpView {
-
-
     void goToCalendarActivityForResult();
 }

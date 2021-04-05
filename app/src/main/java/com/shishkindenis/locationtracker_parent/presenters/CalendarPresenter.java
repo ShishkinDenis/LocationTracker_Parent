@@ -21,9 +21,6 @@ public class CalendarPresenter extends MvpPresenter<CalendarView> {
     public void signOut() {
         firebaseUserSingleton.getFirebaseAuth().signOut();
         getViewState().showToast(R.string.sign_out_successful);
-
-//        удалить
-        getViewState().logSomething();
     }
 
 }

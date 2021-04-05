@@ -9,7 +9,8 @@ public class FirebaseUserSingleton {
     private String userId;
 
     @Inject
-    public FirebaseUserSingleton() { }
+    public FirebaseUserSingleton() {
+    }
 
     public String getUserId() {
         return userId;

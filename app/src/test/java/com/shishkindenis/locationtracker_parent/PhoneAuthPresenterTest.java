@@ -25,8 +25,6 @@ public class PhoneAuthPresenterTest {
     FirebaseAuth auth;
     @Mock
     PhoneAuthCredential credential;
-//    PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
-//    PhoneAuthCredential credential = PhoneAuthProvider.getCredential("555", "777");
     @Mock
     Task task;
     @Mock
@@ -37,12 +35,11 @@ public class PhoneAuthPresenterTest {
         phoneAuthPresenter = new PhoneAuthPresenter(firebaseUserSingleton);
         phoneAuthPresenter.setViewState(phoneAuthView$$State);
     }
+
     @Test
-    public void signInWithCredentialIsCalled(){
-//        when(firebaseUserSingleton.getFirebaseAuth()).thenReturn(auth);
-//        when(PhoneAuthProvider.getCredential("555", "777")).thenReturn(credential);
+    public void signInWithCredentialIsCalled() {
         when(auth.signInWithCredential(credential)).thenReturn(task);
-        phoneAuthPresenter.signInWithPhoneAuthCredential(auth,credential);
+        phoneAuthPresenter.signInWithPhoneAuthCredential(auth, credential);
         verify(auth).signInWithCredential(credential);
     }
 }

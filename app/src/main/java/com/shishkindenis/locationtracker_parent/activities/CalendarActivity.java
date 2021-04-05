@@ -3,7 +3,6 @@ package com.shishkindenis.locationtracker_parent.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -133,11 +132,6 @@ public class CalendarActivity extends BaseActivity implements CalendarView {
         calendar.set(Calendar.DATE, calendarDay);
         long time = calendar.getTimeInMillis();
         binding.calendarView.setDate(time);
-    }
-
-//    DELETE
-    public void logSomething(){
-        Log.d("1","1");
     }
 
 }

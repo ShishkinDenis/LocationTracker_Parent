@@ -13,8 +13,6 @@ import com.shishkindenis.locationtracker_parent.activities.MainActivity;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Random;
-
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -26,12 +24,12 @@ import static com.schibsted.spain.barista.interaction.BaristaMenuClickInteractio
 @RunWith(AndroidJUnit4.class)
 public class SignOutUiTest_Barista {
     FirebaseAuth auth = FirebaseAuth.getInstance();
+
     @Test
-    public void signOutSuccessful(){
-//        string resources
+    public void signOutSuccessful() {
         auth.signOut();
-        String email = "user" + randomInt() + "@example.com";
-        String password = "password" + randomInt();
+        String email = "user" + TestUtils.randomInt() + "@example.com";
+        String password = "password" + TestUtils.randomInt();
         auth.createUserWithEmailAndPassword(email, password);
         BaristaRule<MainActivity> baristaRule = BaristaRule.create(MainActivity.class);
         baristaRule.launchActivity();
@@ -39,19 +37,12 @@ public class SignOutUiTest_Barista {
         writeTo(R.id.etEmail, email);
         writeTo(R.id.etPassword, password);
         clickOn(R.id.btnLogin);
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        TestUtils.sleep();
         ActivityTestRule<CalendarActivity> calendarActivityTestRule = new ActivityTestRule<>(CalendarActivity.class);
         CalendarActivity calendarActivity = calendarActivityTestRule.launchActivity(new Intent());
-        clickOn("OK");
+        clickOn(R.string.ok);
         clickMenu(R.id.action_settings);
-        onView(withText("Sign out successful")).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
+        onView(withText(R.string.sign_out_successful)).inRoot(ToastMatcher.isToast()).check(matches(isDisplayed()));
     }
 
-    private String randomInt() {
-        return String.valueOf(((new Random()).nextInt(100000)));
-    }
 }
