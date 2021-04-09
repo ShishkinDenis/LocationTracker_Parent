@@ -8,6 +8,11 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface MapView extends MvpView {
+    //    DELETE
+    void logSomething();
+
+    void showToast(int toastMessage);
+
     void backToCalendarActivityWithCancelledResult();
 
     void setTrack();

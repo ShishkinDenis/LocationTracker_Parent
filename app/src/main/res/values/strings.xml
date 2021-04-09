@@ -37,4 +37,5 @@
     <string name="request_code">Request Code</string>
     <string name="parent_edition">Parent edition</string>
     <string name="sign_out">Sign out</string>
+    <string name="error_getting_documents">Error getting documents</string>
 </resources>

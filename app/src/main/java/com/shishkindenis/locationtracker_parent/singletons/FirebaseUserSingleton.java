@@ -8,6 +8,8 @@ public class FirebaseUserSingleton {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private String userId;
 
+//    FirebaseFirestore firestoreDataBase = FirebaseFirestore.getInstance();
+
     @Inject
     public FirebaseUserSingleton() {
     }
@@ -23,4 +25,8 @@ public class FirebaseUserSingleton {
     public FirebaseAuth getFirebaseAuth() {
         return auth;
     }
+
+//    public FirebaseFirestore getFirestoreDataBase(){
+//        return firestoreDataBase;
+//    }
 }

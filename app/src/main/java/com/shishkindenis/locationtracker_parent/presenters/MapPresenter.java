@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.shishkindenis.locationtracker_parent.R;
 import com.shishkindenis.locationtracker_parent.singletons.DateSingleton;
 import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
 import com.shishkindenis.locationtracker_parent.views.MapView;
@@ -19,18 +20,27 @@ public class MapPresenter extends MvpPresenter<MapView> {
     private static final String TAG = "Location";
     FirebaseUserSingleton firebaseUserSingleton;
     DateSingleton dateSingleton;
-    private FirebaseFirestore firestoreDataBase;
+//    private FirebaseFirestore firestoreDataBase;
+    FirebaseFirestore firestoreDataBase;
     private String date;
     private String userId;
 
+//    @Inject
+//    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton) {
+//        this.firebaseUserSingleton = firebaseUserSingleton;
+//        this.dateSingleton = dateSingleton;
+//    }
+//
     @Inject
-    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton) {
+    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton,FirebaseFirestore firestoreDataBase) {
         this.firebaseUserSingleton = firebaseUserSingleton;
         this.dateSingleton = dateSingleton;
+        this.firestoreDataBase = firestoreDataBase;
     }
 
     public void readLocation() {
-        firestoreDataBase = FirebaseFirestore.getInstance();
+//        firestoreDataBase = FirebaseFirestore.getInstance();
+//        firestoreDataBase = firebaseUserSingleton.getFirestoreDataBase();
         userId = firebaseUserSingleton.getUserId();
         date = dateSingleton.getDate();
 
@@ -50,9 +60,10 @@ public class MapPresenter extends MvpPresenter<MapView> {
                             }
                         }
                     } else {
-                        Log.w(TAG, "Error getting documents.", task.getException());
+                        getViewState().showToast(R.string.error_getting_documents);
                     }
                 });
+
     }
 
 }

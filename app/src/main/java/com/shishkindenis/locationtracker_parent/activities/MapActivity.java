@@ -4,7 +4,9 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.core.app.ActivityCompat;
 
@@ -105,5 +107,15 @@ public class MapActivity extends MvpAppCompatActivity implements OnMapReadyCallb
 
     public void backToCalendarActivityWithOkResult() {
         setResult(RESULT_OK, null);
+    }
+
+    public void showToast(int toastMessage) {
+        Toast.makeText(getApplicationContext(), toastMessage,
+                Toast.LENGTH_LONG).show();
+    }
+
+    //    DELETE
+    public void logSomething(){
+        Log.d("1","1");
     }
 }

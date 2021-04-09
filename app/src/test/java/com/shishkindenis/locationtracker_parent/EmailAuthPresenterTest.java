@@ -1,6 +1,8 @@
 package com.shishkindenis.locationtracker_parent;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.shishkindenis.locationtracker_parent.presenters.EmailAuthPresenter;
 import com.shishkindenis.locationtracker_parent.singletons.FirebaseUserSingleton;
@@ -9,6 +11,7 @@ import com.shishkindenis.locationtracker_parent.views.EmailAuthView$$State;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
@@ -28,6 +31,30 @@ public class EmailAuthPresenterTest {
     Task task;
     @Mock
     EmailAuthView$$State emailAuthView$$State;
+
+
+//    successTask = object : Task<AuthResult>() {
+//        override fun isComplete(): Boolean = true
+//
+//        override fun isSuccessful(): Boolean = true
+//         ...
+//        override fun addOnCompleteListener(executor: Executor,
+//                onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
+//            onCompleteListener.onComplete(successTask)
+//            return successTask
+//        }
+//    }
+//
+//    failureTask = object : Task<AuthResult>() {
+//        override fun isComplete(): Boolean = true
+//
+//        override fun isSuccessful(): Boolean = false
+//         ...
+//        override fun addOnCompleteListener(executor: Executor,
+//                onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
+//            onCompleteListener.onComplete(failureTask)
+//            return failureTask
+//        }
 
     @Before
     public void setUp() {
@@ -51,6 +78,34 @@ public class EmailAuthPresenterTest {
         when(auth.signInWithEmailAndPassword(email, password)).thenReturn(task);
         emailAuthPresenter.signIn(auth, email, password);
         verify(auth).signInWithEmailAndPassword(email, password);
+    }
+
+    @Test
+    public void signingUpFailedToastIsCalled() {
+        String email = "user" + randomInt() + "@example.com";
+        String password = "password" + randomInt();
+        when(auth.createUserWithEmailAndPassword(email, password)).thenReturn(task);
+        emailAuthPresenter.createAccount(auth, email, password);
+        ArgumentCaptor<OnCompleteListener<AuthResult>> listenerCaptor =
+                ArgumentCaptor.forClass(OnCompleteListener.class);
+        verify(task).addOnCompleteListener(listenerCaptor.capture());
+        OnCompleteListener<AuthResult> onCompleteListener = listenerCaptor.getValue();
+        onCompleteListener.onComplete(task);
+        verify(emailAuthView$$State).showToast(R.string.signing_up_failed);
+    }
+
+    @Test
+    public void authenticationToastIsCalled() {
+        String email = "user" + randomInt() + "@example.com";
+        String password = "password" + randomInt();
+        when(auth.signInWithEmailAndPassword(email, password)).thenReturn(task);
+        emailAuthPresenter.signIn(auth, email, password);
+        ArgumentCaptor<OnCompleteListener<AuthResult>> listenerCaptor =
+                ArgumentCaptor.forClass(OnCompleteListener.class);
+        verify(task).addOnCompleteListener(listenerCaptor.capture());
+        OnCompleteListener<AuthResult> onCompleteListener = listenerCaptor.getValue();
+        onCompleteListener.onComplete(task);
+        verify(emailAuthView$$State).showToast(R.string.authentication_failed);
     }
 
     private String randomInt() {
