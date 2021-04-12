@@ -6,8 +6,6 @@ import moxy.viewstate.strategy.StateStrategyType;
 
 @StateStrategyType(AddToEndSingleStrategy.class)
 public interface EmailAuthView extends MvpView {
-    //    DELETE
-    void logSomething();
 
     void showToast(int toastMessage);
 

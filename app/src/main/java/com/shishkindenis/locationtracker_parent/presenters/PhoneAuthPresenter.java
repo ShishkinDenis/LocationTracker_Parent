@@ -90,13 +90,6 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
         signInWithPhoneAuthCredential(auth, credential);
     }
 
-//    DELETE
-    public void someMethod(){
-//        Log.d("1","1");
-//        logMethod();
-//        System.out.println(1);
-        print();
-    }
 
     public void logMethod(){
         Log.d("1","1");

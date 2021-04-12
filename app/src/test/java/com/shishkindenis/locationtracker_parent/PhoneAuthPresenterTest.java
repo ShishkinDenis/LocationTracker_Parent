@@ -33,9 +33,6 @@ public class PhoneAuthPresenterTest {
     @Mock
     PhoneAuthView$$State phoneAuthView$$State;
 
-//    @Mock
-//    PhoneAuthProvider phoneAuthProvider;
-
     @Before
     public void setUp() {
         phoneAuthPresenter = new PhoneAuthPresenter(firebaseUserSingleton);
@@ -59,29 +56,6 @@ public class PhoneAuthPresenterTest {
         OnCompleteListener<AuthResult> onCompleteListener = listenerCaptor.getValue();
         onCompleteListener.onComplete(task);
         verify(phoneAuthView$$State).showToast((R.string.authentication_failed));
-    }
-
-//    PowerMockito.mockStatic(TestClass.class);
-// when(TestClass.getString()).thenReturn("HelloWorld!");
-
-    @Test
-    public void verifyPhoneNumberWithCodeTest(){
-        String phoneVerificationId = "555";
-        String code = "777";
-//        when(PhoneAuthProvider.getCredential(phoneVerificationId, code)).thenReturn(credential);
-        phoneAuthPresenter.verifyPhoneNumberWithCode(auth,code);
-    }
-
-
-
-
-
-
-    @Test
-    public void testSomeMethod(){
-//        when(Log.d("1","1")).thenReturn();
-//        doNothing().when(Log.d("1","1"));
-        phoneAuthPresenter.someMethod();
     }
 
 

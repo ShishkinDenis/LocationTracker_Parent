@@ -20,17 +20,10 @@ public class MapPresenter extends MvpPresenter<MapView> {
     private static final String TAG = "Location";
     FirebaseUserSingleton firebaseUserSingleton;
     DateSingleton dateSingleton;
-//    private FirebaseFirestore firestoreDataBase;
     FirebaseFirestore firestoreDataBase;
     private String date;
     private String userId;
 
-//    @Inject
-//    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton) {
-//        this.firebaseUserSingleton = firebaseUserSingleton;
-//        this.dateSingleton = dateSingleton;
-//    }
-//
     @Inject
     public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton,FirebaseFirestore firestoreDataBase) {
         this.firebaseUserSingleton = firebaseUserSingleton;
@@ -39,8 +32,6 @@ public class MapPresenter extends MvpPresenter<MapView> {
     }
 
     public void readLocation() {
-//        firestoreDataBase = FirebaseFirestore.getInstance();
-//        firestoreDataBase = firebaseUserSingleton.getFirestoreDataBase();
         userId = firebaseUserSingleton.getUserId();
         date = dateSingleton.getDate();
 

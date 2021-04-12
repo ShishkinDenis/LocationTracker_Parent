@@ -32,30 +32,6 @@ public class EmailAuthPresenterTest {
     @Mock
     EmailAuthView$$State emailAuthView$$State;
 
-
-//    successTask = object : Task<AuthResult>() {
-//        override fun isComplete(): Boolean = true
-//
-//        override fun isSuccessful(): Boolean = true
-//         ...
-//        override fun addOnCompleteListener(executor: Executor,
-//                onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
-//            onCompleteListener.onComplete(successTask)
-//            return successTask
-//        }
-//    }
-//
-//    failureTask = object : Task<AuthResult>() {
-//        override fun isComplete(): Boolean = true
-//
-//        override fun isSuccessful(): Boolean = false
-//         ...
-//        override fun addOnCompleteListener(executor: Executor,
-//                onCompleteListener: OnCompleteListener<AuthResult>): Task<AuthResult> {
-//            onCompleteListener.onComplete(failureTask)
-//            return failureTask
-//        }
-
     @Before
     public void setUp() {
         emailAuthPresenter = new EmailAuthPresenter(firebaseUserSingleton);
