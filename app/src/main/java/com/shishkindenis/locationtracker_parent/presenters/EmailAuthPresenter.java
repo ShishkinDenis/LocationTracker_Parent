@@ -45,5 +45,4 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
                     }
                 });
     }
-
 }
