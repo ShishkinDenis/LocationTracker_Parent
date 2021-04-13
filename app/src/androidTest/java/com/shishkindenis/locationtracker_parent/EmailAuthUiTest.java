@@ -113,9 +113,11 @@ public class EmailAuthUiTest {
     private void enterPassword(String password) {
         onView(withId(R.id.etPassword)).perform(replaceText(password));
     }
+
     private String getRandomEmail(){
         return "user" + TestUtils.randomInt() + "@example.com";
     }
+
     private String getRandomPassword(){
         return "password" + TestUtils.randomInt();
     }

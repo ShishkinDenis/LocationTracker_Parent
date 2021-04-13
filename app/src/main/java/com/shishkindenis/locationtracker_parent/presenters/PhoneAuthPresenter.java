@@ -2,12 +2,8 @@ package com.shishkindenis.locationtracker_parent.presenters;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
@@ -35,11 +31,11 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
         this.firebaseUserSingleton = firebaseUserSingleton;
     }
 
-    public PhoneAuthProvider.OnVerificationStateChangedCallbacks phoneVerificationCallback(FirebaseAuth auth) {
+    public PhoneAuthProvider.OnVerificationStateChangedCallbacks phoneVerificationCallback() {
         callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential credential) {
-                signInWithPhoneAuthCredential(auth, credential);
+                signInWithPhoneAuthCredential(credential);
             }
 
             @Override
@@ -62,30 +58,27 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
         return callbacks;
     }
 
-    public void signInWithPhoneAuthCredential(FirebaseAuth auth, PhoneAuthCredential credential) {
-        auth.signInWithCredential(credential)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            userId = user.getUid();
-                            firebaseUserSingleton.setUserId(userId);
-                            PhoneAuthPresenter.this.getViewState().showToast(R.string.authentication_successful);
-                            PhoneAuthPresenter.this.getViewState().goToCalendarActivity();
-                        } else {
-                            PhoneAuthPresenter.this.getViewState().showToast((R.string.authentication_failed));
-                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
-                                PhoneAuthPresenter.this.getViewState().showInvalidCodeError();
-                            }
+    public void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        firebaseUserSingleton.getFirebaseAuth().signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = task.getResult().getUser();
+                        userId = user.getUid();
+                        firebaseUserSingleton.setUserId(userId);
+                        getViewState().showToast(R.string.authentication_successful);
+                        getViewState().goToCalendarActivity();
+                    } else {
+                        PhoneAuthPresenter.this.getViewState().showToast((R.string.authentication_failed));
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            getViewState().showInvalidCodeError();
                         }
                     }
                 });
     }
 
-    public void verifyPhoneNumberWithCode(FirebaseAuth auth, String code) {
+    public void verifyPhoneNumberWithCode(String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
-        signInWithPhoneAuthCredential(auth, credential);
+        signInWithPhoneAuthCredential(credential);
     }
 
 }
