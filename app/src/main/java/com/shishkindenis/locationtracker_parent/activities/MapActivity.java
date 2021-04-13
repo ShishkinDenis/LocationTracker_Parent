@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -114,8 +113,4 @@ public class MapActivity extends MvpAppCompatActivity implements OnMapReadyCallb
                 Toast.LENGTH_LONG).show();
     }
 
-    //    DELETE
-    public void logSomething(){
-        Log.d("1","1");
-    }
 }

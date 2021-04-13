@@ -25,7 +25,7 @@ public class MapPresenter extends MvpPresenter<MapView> {
     private String userId;
 
     @Inject
-    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton,FirebaseFirestore firestoreDataBase) {
+    public MapPresenter(FirebaseUserSingleton firebaseUserSingleton, DateSingleton dateSingleton, FirebaseFirestore firestoreDataBase) {
         this.firebaseUserSingleton = firebaseUserSingleton;
         this.dateSingleton = dateSingleton;
         this.firestoreDataBase = firestoreDataBase;

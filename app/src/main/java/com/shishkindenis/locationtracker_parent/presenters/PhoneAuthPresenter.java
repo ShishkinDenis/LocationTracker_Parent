@@ -1,7 +1,5 @@
 package com.shishkindenis.locationtracker_parent.presenters;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,7 +26,7 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
 
     FirebaseUserSingleton firebaseUserSingleton;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
-    private String phoneVerificationId;
+    private String phoneVerificationId = "phoneVerificationId";
     private PhoneAuthProvider.ForceResendingToken forceResendingToken;
     private String userId;
 
@@ -88,14 +86,6 @@ public class PhoneAuthPresenter extends MvpPresenter<PhoneAuthView> {
     public void verifyPhoneNumberWithCode(FirebaseAuth auth, String code) {
         PhoneAuthCredential credential = PhoneAuthProvider.getCredential(phoneVerificationId, code);
         signInWithPhoneAuthCredential(auth, credential);
-    }
-
-
-    public void logMethod(){
-        Log.d("1","1");
-    }
-    public void print(){
-        System.out.println(1);
     }
 
 }

@@ -29,7 +29,6 @@ public class EmailAuthPresenter extends MvpPresenter<EmailAuthView> {
                     } else {
                         getViewState().showToast(R.string.signing_up_failed);
                     }
-//                        getViewState().logSomething();
                 });
     }
 

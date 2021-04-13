@@ -41,19 +41,8 @@ public class MapPresenterTest {
 
     @Before
     public void setUp() {
-//        mapPresenter = new MapPresenter(firebaseUserSingleton,dateSingleton);
         mapPresenter = new MapPresenter(firebaseUserSingleton,dateSingleton,firestoreDataBase);
         mapPresenter.setViewState(mapView$$State);
-    }
-//    DELETE
-    @Test
-    public void errorGettingDocumentsIsCalled0() {
-        String DATE_FIELD = "Date";
-        String date = "2021-04-07";
-        String userId = null;
-        when(firestoreDataBase.collection(userId)).thenReturn(collectionReference);
-        mapPresenter.readLocation();
-        verify(firestoreDataBase).collection(userId);
     }
 
     @Test
@@ -75,6 +64,5 @@ public class MapPresenterTest {
         onCompleteListener.onComplete(task);
         verify(mapView$$State).showToast(R.string.error_getting_documents);
     }
-
 
 }
